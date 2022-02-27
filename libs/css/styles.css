@@ -10,7 +10,7 @@
     background-size: cover;
 }
  .layer {
-  background-image: url("/libs/images/layered-waves-haikei\ \(1\).svg");
+  background-image: url("libs/images/layered-waves-haikei\ \(1\).svg");
  }
 
 /* Hide employee locations when screen size is smaller than 425px */
