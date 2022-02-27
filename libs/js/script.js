@@ -508,6 +508,7 @@ const populateEmployees = () => {
 
                     //OPEN MODAL AND DELETE EMPLOYEE
                     $(`#delete${id}`).on("click", ()=> {
+                        console.log("One")
                         $("#cannotDeleteImg").hide()
                         $("#deleteBody > h5").show()
                         $("#deleteBody > h5").text("Are you sure?")
@@ -527,6 +528,7 @@ const populateEmployees = () => {
                                     id: id
                                 },
                                 success: function() {
+                                    $("#deleteConfirmation").off()
                                     checkState()
                                 },
                                 error: function(jqXHR, textStatus, errorThrown) {
