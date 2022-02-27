@@ -11,38 +11,46 @@
 </head>
 <body>
 
-  <div class="d-flex flex-column vh-100">
+  <div class="d-flex flex-column vh-100 layer spacer">
+    <!-- WEBPAGE HEADING AND BUTTONS -->
     <div class="container-fluid">
-      <div class="row">
-        <h1 class="col text-center fw-bold">Company Directory</h1>
-        <div class="col"><button type="button" class="btn btn-dark" id="getEmployees">Employees</button></div>
-        <div class="col"><button type="button" class="btn btn-dark" id="getDepartments">Departments</button></div>
-        <div class="col"><button type="button" class="btn btn-dark" id="getLocations">Location</button></div>
+      <div class="row align-items-center">
+        <div class="col-lg-6 ">
+          <h1 class="col text-center fw-bold pt-5 pb-2 p-lg-5 text-uppercase">Company Directory</h1>
+        </div>
+        <div class="col-lg-6 p-lg-2 pb-4" >
+          <div class="row align-items-center">
+            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="getEmployees" class="text-decoration-underline fw-bold fs-4">Employees</span></div>
+            <div class="col-lg-4 col-sm-12 text-center py-1"><span role="button" id="getDepartments" class="text-decoration-underline fw-bold fs-4"> Departments</span></div>
+            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="getLocations" class="text-decoration-underline fw-bold fs-4"> Location</button></div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- search -->
-    <div class="container-fluid">
-      <div class="row">
-          <form class="col" method="GET">
-            <input type="text" name="employee" id="searchBar" placeholder="Search Employees">
-            <select name="filter" id="searchOptions" placeholder="" class="">
-              <option value="all" hidden selected>filter</option>
-              <option value="all">All</option>
-              <option value="firstName">Name</option>
-              <option value="lastName">Surname</option>
-            </select>
-            <button class="btn btn-dark" type="submit" id="searchButton">search</button>
-          </form>
-          <!-- dynamic button -->
-          <div class="col" id="changeButton"></div>
-        </div>
+    <div class="container-fluid ">
+      <div class="row p-2">
+        <form class="col-sm-12 col-lg-6">
+          <input type="text" name="employee" id="searchBar" placeholder="Search Employees">
+          <select name="filter" id="searchOptions" placeholder="" class="form-select-sm">
+            <option value="all" hidden selected>filter</option>
+            <option value="all">All</option>
+            <option value="firstName">Name</option>
+            <option value="lastName">Surname</option>
+          </select>
+          <button class="btn btn-dark m-1 " type="submit" id="searchButton">search</button>
+        </form>
+        <div class="col align-self-end p-lg-1">
+            <div class="d-flex justify-content-end" id="changeButton"></div>
+        </div> 
+      </div>
+        
+        
     </div>
-
-    <br>
       
     <!-- table -->
-    <div class="overflow-auto d-flex border mb-3">
+    <div class="overflow-auto d-flex border mb-3 my-sm-2 my-lg-3">
       <table class="table table-sm table-light table-striped mx-md-auto " >
         <thead class="sticky-top border-bottom" id="headingSelection"></thead>
       </table>
