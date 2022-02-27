@@ -508,6 +508,8 @@ const populateEmployees = () => {
 
                     //OPEN MODAL AND DELETE EMPLOYEE
                     $(`#delete${id}`).on("click", ()=> {
+                        $("#cannotDeleteImg").hide()
+                        $("#deleteBody > h5").show()
                         $("#deleteBody > h5").text("Are you sure?")
                         $("#deleteBody > p").text("Do you really want to delete this record? This process cannot be undone.")
                         $("#deleteConfirmation").css({display: "block"})
@@ -736,11 +738,13 @@ const checkDepencency = (value, target) => {
                 
             
             if(data.length != 0 ) {
-                $("#deleteBody > h5").text("Error")
                 $("#deleteBody > p").text(errorMessage)
                 $("#deleteConfirmation").hide()
+                $("#deleteBody > h5").hide()
+                $("#cannotDeleteImg").show()
             } else {
-                $("#deleteBody > h5").text("Are you sure?")
+                $("#cannotDeleteImg").hide()
+                $("#deleteBody > h5").text("Are you sure?").show()
                 $("#deleteBody > p").text("Do you really want to delete this record? This process cannot be undone.")
                 // $("#deleteFooter").append('<button type="button" class="btn btn-danger" id="deleteConfirmation">Delete</button>')
                 $("#deleteConfirmation").css({display: "block"})
