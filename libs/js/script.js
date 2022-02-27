@@ -1,451 +1,40 @@
 let state = "all";
-
-
+// INITIAL LOAD
 $(function(){
-    // INITIAL LOAD
     checkState();
-    changeButton("addEmployee", "Add Employees")
 })
 
 
-//GET ALL EMPLOYEES
+//GET ALL EMPLOYEES AND DEFINE ADD EMPLOYEE
 $("#getEmployees").on("click", () =>{
-    state = "all";
-    checkState()
-    $("#searchBar").val("").change()
+    if(state != "all") {
+        state = "all";
+        checkState()
+    }
+    
+    
 })
 
-const personnel = () => {
-    $.ajax({
-        url: "libs/php/getAll.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-        },
-        success: function(result) {
-            
-            if (result.status.name == "ok") {
-                
-                changeButton("addEmployee", "Add Employees")
-                addEmployee()
-                let users = result.data;
-                users.forEach(element => {
-                    $("#tableBody").append(`
-                        <tr id="tableHeaderNames">
-                            <td>${element.firstName} ${element.lastName}</td>
-                            <td>${element.location}</td>
-                            <td>${element.department}</td>
-                            <td>
-                                <button type="button" class="btn btn-warning edit" id="${element.id}">Edit</button>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger delete" id="${element.id}">Delete</button>
-                            </td>
-                        </tr>
-                    `)
-                });
-            }
-        
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-            console.log(errorThrown);
-        }
-    }); 
-}
-
-
-
-//GET LOCATIONS
+//GET ALL LOCATIONS AND DEFINE ADD LOCATION
 $("#getLocations").on("click", () =>{
     state = "location";
     checkState();
-    changeButton("addLocations", "Add Locations")
-    // OPEN ADD LOCATION MODAL AND POPULATE
-    $("#addLocations").on("click", function(){
-        $("#manageLocationsModal").modal("show");
-        $("#locationText").text("Add Location:")
-        $("#locationName").val("")
-        $("#locationSpanError")
-            .text("")
-        $("#locationsFooter").html(`
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" id="confirmAddingLocation">Confirm</button>
-        `)
-        // ADD LOCATIONS
-        $("#confirmAddingLocation").on("click", function(){
-            
-            if($("#locationName").val() === "" || !$("#locationName").val().match(/^([^0-9]*)$/)) {
-                $("#locationSpanError")
-                .text("Please enter a valid location name")
-                .css(cssError)
-            } else {
-                console.log("addLocation")
-                $.ajax({
-                    url: `libs/php/insertLocation.php`,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        name: $("#locationName").val()
-                    },  
-                    success: function() {
-                        $("#confirmAddingLocation").off()
-                        $("#manageLocationsModal").modal("hide")
-                        checkState()
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                    }
-                }); 
-            }
-        })
-    })
-    $("#searchBar").val("").change()
-    
-
 })
 
-// GET DEPARTMENTS
+// GET ALL DEPARTMENTS AND DEFINE ADD DEPARTMENT
 $("#getDepartments").on("click", () =>{
     state = "departments";
     checkState();
-    changeButton("addDepartments", "Add Departments")
-    // OPEN ADD LOCATION MODAL AND POPULATE
-    $("#addDepartments").on("click", function(){
-        $("#manageDepartmentsModal").modal("show");
-        populateLocationsDropdown("#locationsDropdown")
-        $("#departmentName").val("")
-        $("#departmentNameError").text("")
-        $("#departmentsFooter").html(`
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" id="addDepartmentConfirmation">Confirm</button>
-        `)
-        // ADD DEPARTMENT
-        $("#addDepartmentConfirmation").on("click", function() {
-            if($("#departmentName").val() === "" || !$("#departmentName").val().match(/^([^0-9]*)$/)){
-                $("#departmentNameError")
-                    .text("Please enter a valid location name")
-                    .css(cssError)
-            } else {
-                $("#departmentNameError").text("")
-                $.ajax({
-                    url: `libs/php/insertDepartment.php`,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        name: $("#departmentName").val(),
-                        locationID: $("#locationsDropdown").val()
-                    },  
-                    success: function() {
-                        console.log("add department---test")
-                        checkState()
-                        $("#manageDepartmentsModal").modal("hide")
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                    }
-                });
-            } 
-        })
-    }) 
-    $("#searchBar").val("").change()
 })
 
-// Edit Departments
-$(document).on("click", ".departmentEdit", function() {
-    let department = this.id
-
-    $.ajax({
-        url: "libs/php/getDepartmentByID.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            id: department,
-            action: "byID"
-        },    
-        success: function(result) {  
-            $("#departmentsFooter").html(`
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" id="editDepartmentConfirmation">Confirm</button>
-            `)          
-
-            $("#departmentName").val(result.data[0].name)
-            $("#manageDepartmentsModal").modal("show");
-
-            populateLocationsDropdown("#locationsDropdown", ()=> {
-                $("#locationsDropdown").val(result.data[0].locationID).change()
-            })
-            
-            $("#editDepartmentConfirmation").on("click", function() {
-
-                if($("#departmentName").val() === ""){
-                    $("#departmentNameError")
-                    .text("Please enter a valid location name.")
-                    .css(cssError)
-                } else {
-                   $.ajax({
-                        url: `libs/php/updateHandler.php`,
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            action: "department",
-                            name: $("#departmentName").val(),
-                            locationID: $("#locationsDropdown").val(),
-                            id: department
-                        },  
-                        success: function() {
-                            console.log("one two three")
-                            $("#manageDepartmentsModal").modal("hide")
-                            checkState()
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus);
-                            console.log(errorThrown);
-                        }
-                    }); 
-                }
-            })
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-            console.log(errorThrown);
-        }
-    });
-});
-
-// EDIT EMPLOYEES
-$(document).on("click", ".edit", function() {
-    let id = this.id
-    let personnelData;
-    $.ajax({
-        url: "libs/php/getPersonnelByID.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            id: id
-        },
-        success: function(result) {
-            
-            
-            personnelData = result
-            
-            $("#newEmployeeModal").modal("show")
-            // $("#employeeInformation").html(`
-            //     <div class="modal-header">
-            //         <h5 class="modal-title" id="exampleModalLabel">Update Personnel</h5>
-            //         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            //     </div>
-            //     <div class="modal-body">
-            //     <form>
-            //         <div class="mb-3">
-            //             <label for="editFirstName" class="form-label">First name:</label>
-            //             <input type="text" class="form-control" id="editFirstName" value="${personnelData.data.personnel[0].firstName}">
-            //             <span></span>
-            //         </div>
-            //         <div class="mb-3">
-            //             <label for="editLastName" class="form-label">Last name:</label>
-            //             <input type="text" class="form-control" id="editLastName" value="${personnelData.data.personnel[0].lastName}">
-            //             <span></span>
-            //         </div>
-            //         <div class="mb-3">
-            //             <label for="editEmail" class="form-label">Email:</label>
-            //             <input type="email" class="form-control" id="editEmail" value="${personnelData.data.personnel[0].email}">
-            //             <span></span>
-            //         </div>
-
-            //         <h5>Select Location:</h5>
-            //         <select class="form-select" id="employeeLocation" required></select>
-                    
-            //         <br>
-
-                
-            //         <h5>Department:</h5>
-            //         <select class="form-select" id="employeeDepartment" required></select><br>
-
-            //         <div class="modal-footer border-top-0">
-            //         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            //         <button type="button" class="btn btn-primary" id="updateEmployee">Save changes</button>                    
-            //     </div> 
-            //     </form>
-            //     </div> 
-            // `);
-            setInterval(() => {
-                $("#employeeLocation").on("change", ()=> {
-                getDepartmentsOfLocation($("#employeeLocation").val(), "#employeeDepartment")
-            })
-            }, 1000);
-            
-            let employeeDepartmentID = (personnelData.data.personnel[0].departmentID -1);
-            let employeeCity = result.data.department[employeeDepartmentID].locationID
-            console.log(employeeCity)
-            console.log(result)
-            
-            populateLocationsDropdown("#employeeLocation", ()=>{
-                $("#employeeLocation").val(employeeCity).change()
-            })
-            getDepartmentsOfLocation(employeeCity, "#employeeDepartment", ()=> {
-                $("#employeeDepartment").val(result.data.personnel[0].departmentID).change()
-            })
-            
-            // UPDATE DB
-            
-            $("#updateEmployee").on("click", function(event) {
-
-                let editFirstName = "";
-                let editLastName = "";
-                let editEmail = "";
-                if($("#editFirstName").val() === "") {
-                    editFirstName = "Please provide a first name."
-                    $("#employeeInformation > div.modal-body > form > div:nth-child(1) > span")
-                    .css(cssError)
-                    .text(editFirstName)
-                } else {
-                    $("#employeeInformation > div.modal-body > form > div:nth-child(1) > span").text("")
-                    editFirstName = ""
-                }
-                if($("#editLastName").val() === "") {
-                    editLastName = "Please provide a last name."
-                    $("#employeeInformation > div.modal-body > form > div:nth-child(2) > span")
-                    .css(cssError)
-                    .text(editLastName)
-                } else {
-                    $("#employeeInformation > div.modal-body > form > div:nth-child(2) > span")
-                    .text("")
-                    editLastName = ""
-                }
-                if($("#editEmail").val() === "") {
-                    editEmail = "Please enter an email address."
-                    $("#employeeInformation > div.modal-body > form > div:nth-child(3) > span")
-                    .css(cssError)
-                    .text(editEmail)
-                } else {
-                    if(validateEmail($("#editEmail").val())){
-                        $("#employeeInformation > div.modal-body > form > div:nth-child(3) > span")
-                        .text("")
-                        editEmail = ""
-                    } else{
-                        editEmail = "Please provide a valid email address."
-                        $("#employeeInformation > div.modal-body > form > div:nth-child(3) > span")
-                        .css(cssError)
-                        .text(editEmail)
-                    }
-                    
-                }
-                if(editFirstName != "" || editLastName != "" || editEmail != "") {
-                    return false
-                } else { 
-                    event.preventDefault()
-                    $("#editEmployeeModal").modal("toggle")
-                    $.ajax({
-                        url: `libs/php/updateHandler.php`,
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            action: "employee",
-                            firstName: $("#editFirstName").val(),
-                            lastName: $("#editLastName").val(),
-                            email: $("#editEmail").val(),
-                            departmentID: $("#employeeDepartment").val(),
-                            id: id
-                        },  
-                        success: function() {
-                            checkState()
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus);
-                            console.log(errorThrown);
-                        }
-                    });
-                }
-            })
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-            console.log(errorThrown);
-        }
-    }); 
-    
-});
-
-// DELETE EMPLOYEE
-
-$(document).on("click", ".delete", function() {
-    let employeeID = this.id
-    $("#deleteBody > h5").text("Are you sure?")
-    $("#deleteBody > p").text("Do you really want to delete this record? This process cannot be undone.")
-    $("#deleteConfirmation").css({display: "block"})
-
-    $('#deleteEmployeeModal').modal("show");
-   
-    // Confirmation of delete
-    $("#deleteConfirmation").on("click", function(){
-        $("#deleteEmployeeModal").modal("toggle")
-        $.ajax({
-            url: "libs/php/deletePersonnel.php",
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                id: employeeID
-            },
-            success: function() {
-                checkState()
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus);
-                console.log(errorThrown);
-            }
-        });
-        
-    })
-});
-
-// DELETE LOCATION
-$(document).on("click", ".locationDelete", function() {
-    let id = this.id
-    checkDepencency(id, "location")
-});
-
-// DELETE DEPARTMENT
-$(document).on("click", ".departmentDelete", function() {
-    let id = this.id
-    checkDepencency(id, "department")
-});
-
-// SET TABLE HEAD ACCORDING TO STATE
+// CHANGE TABLE HEADER, ADD, EDIT AND BODY ACCORDING TO STATE
 const checkState = () => {
     switch(state) {
 
-     case (""):
+     case "all":
          
-        if($("#tableHeaderNames")){
-           $("#tableHeaderNames").remove();
-           $("#tableBody").remove() 
-        }
-         
-        $("#headingSelection").append(`
-        <tr class="border-bottom" id="tableHeaderNames">
-           <th scope="col">Name</th>
-           <th scope="col">Location</th>
-           <th scope="col">Department</th>
-           <th scope="col"></th>
-           <th scope="col"></th>
-        </tr>
-        `)
-
-        $(".table").append('<tbody id="tableBody"></tbody>')
-        
-       break;
-
-     case ("all"):
-         
-        if($("#tableHeaderNames")){
-           $("#tableHeaderNames").remove();
-           $("#tableBody").remove() 
-        }
-        
-        $("#headingSelection").append(`
+        $(".table").html(`
+        <thead class="sticky-top border-bottom" id="headingSelection">
         <tr id="tableHeaderNames">
         <th scope="col">Name</th>
         <th scope="col">Location</th>
@@ -453,147 +42,57 @@ const checkState = () => {
         <th scope="col"></th>
         <th scope="col"></th>
         </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
         `)
 
-        $(".table").append('<tbody id="tableBody"></tbody>')
-        personnel()
+        changeButton("addEmployee", "Add Employees")
+        $("#searchBar").val("").change()
+        populateEmployees()
          
        break;
 
      case "departments":
-         
-        if($("#tableHeaderNames")){
-            $("#tableHeaderNames").remove();
-            $("#tableBody").remove();
-        }
 
-        $("#headingSelection").append(`
+        $(".table").html(`
+        <thead class="sticky-top border-bottom" id="headingSelection">
         <tr id="tableHeaderNames">
         <th scope="col">Department</th>
         <th scope="col"></th>
         <th scope="col"></th>
         </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
         `)
 
-        $(".table").append('<tbody id="tableBody"></tbody>')
+        changeButton("addDepartments", "Add Departments")
+        $("#searchBar").val("").change()
         populateDepartments();
+
        break;
 
      case "location":
-         
-        if($("#tableHeaderNames")){
-            $("#tableHeaderNames").remove();
-            $("#tableBody").remove();
-        }
 
-        $("#headingSelection").append(`
+        $(".table").html(`
+        <thead class="sticky-top border-bottom" id="headingSelection">
         <tr id="tableHeaderNames">
         <th scope="col">Locations</th>
         <th scope="col"></th>
         <th scope="col"></th>
         </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
         `)
 
-        $(".table").append('<tbody id="tableBody"></tbody>')
+        changeButton("addLocations", "Add Locations")
+        $("#searchBar").val("").change()
         populateLocations();
        break;
-     default:
-         
+    
      } 
  };
 
-const changeButton = (idName, buttonText) => {
-    $("#changeButton").html(`
-        <button type="button" class="btn btn-dark" id="${idName}">${buttonText}</button>
-    `)
-    
-}
-//
-// ADD EMPLOYEE
-const addEmployee = () => {
-    $("#addEmployee").on("click", function(){
-        let id;
-        $("#newEmployeeModal").modal("show")
-        $("#addEmployeeLocation").on("change", function(){
-            id = this.value
-        })
-        $("#addEmployeeLocation").on("change", ()=> {
-            getDepartmentsOfLocation(id, "#addDepartments")
-        })
-        populateLocationsDropdown("#addEmployeeLocation")
-        getDepartmentsOfLocation(1, "#addDepartments")
-        
-        
-        
-        $("#createNewEmployee").on("click", function(event){
-            event.preventDefault();
-            let firstName = "";
-            let lastName = "";
-            let email = "";
-            if($("#firstName").val() === "") {
-                firstName = "Please provide a first name."
-                $("#formTest > div:nth-child(1) > span")
-                .css(cssError)
-                .text(firstName)
-            } else {
-                $("#formTest > div:nth-child(1) > span").text("")
-                firstName = ""
-            }
-            if($("#lastName").val() === "") {
-                lastName = "Please provide a last name."
-                $("#formTest > div:nth-child(2) > span")
-                .css(cssError)
-                .text(lastName)
-            } else {
-                $("#formTest > div:nth-child(2) > span").text("")
-                lastName = ""
-            }
-            if($("#email").val() === "") {
-                email = "Please enter an email address."
-                $("#formTest > div:nth-child(3) > span")
-                .css(cssError)
-                .text(email)
-            } else {
-                if(validateEmail($("#email").val())){
-                    $("#formTest > div:nth-child(3) > span").text("")
-                    email = ""
-                } else{
-                    email = "Please provide a valid email address."
-                    $("#formTest > div:nth-child(3) > span")
-                    .css(cssError)
-                    .text(email)
-                }
-                
-            }
-            if(firstName != "" || lastName != "" || email != "") {
-                return false
-            } else {
-                $.ajax({
-                    url: `libs/php/insertPersonnel.php`,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        firstName: $("#firstName").val(),
-                        lastName: $("#lastName").val(),
-                        email: $("#email").val(),
-                        locationID: $("#addDepartments").val() 
-                    },  
-                    success: function() {
-                        console.log("employee added")
-                        checkState()
-                        $("#newEmployeeModal").modal("toggle")
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                    }
-                }); 
-            }
-        })
-    })
-}
-
-// AJAX CALL
+// TABLE POPULATION FUNCTIONS
 
 const populateLocations = () => {
     $.ajax({
@@ -618,7 +117,7 @@ const populateLocations = () => {
                                 <button type="button" class="btn btn-warning locationEdit" id="edit${id}">Edit</button>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger locationDelete" id="${id}">Delete</button>
+                                <button type="button" class="btn btn-danger locationDelete" id="delete${id}">Delete</button>
                             </td>
                         </tr>
                     `)
@@ -678,19 +177,57 @@ const populateLocations = () => {
                         });
                         
                     });
+                    // CHECK DEPENDANCY BEFORE DELETING
                     $(`#delete${id}`).on("click", ()=> {
-                        checkDepencency()
+                        checkDepencency(id, "location")
                     })
-                });
-                
+                }); 
             }
-        
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus);
             console.log(errorThrown);
         }
-    }); 
+    });
+    // OPEN ADD LOCATION MODAL AND POPULATE
+    $("#addLocations").on("click", function(){
+        $("#manageLocationsModal").modal("show");
+        $("#locationText").text("Add Location:")
+        $("#locationName").val("")
+        $("#locationSpanError")
+            .text("")
+        $("#locationsFooter").html(`
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" id="confirmAddingLocation">Confirm</button>
+        `)
+        // ADD LOCATIONS
+        $("#confirmAddingLocation").on("click", function(){
+            
+            if($("#locationName").val() === "" || !$("#locationName").val().match(/^([^0-9]*)$/)) {
+                $("#locationSpanError")
+                .text("Please enter a valid location name")
+                .css(cssError)
+            } else {
+                $.ajax({
+                    url: `libs/php/insertLocation.php`,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        name: $("#locationName").val()
+                    },  
+                    success: function() {
+                        $("#confirmAddingLocation").off()
+                        $("#manageLocationsModal").modal("hide")
+                        checkState()
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                }); 
+            }
+        })
+    })
 }
 
 const populateDepartments = () => {
@@ -709,18 +246,296 @@ const populateDepartments = () => {
                         <tr>
                             <td scope="Row">${element.name}</td>
                             <td>
-                                <button type="button" class="btn btn-warning departmentEdit" id="${element.id}">Edit</button>
+                                <button type="button" class="btn btn-warning departmentEdit" id="edit${element.id}">Edit</button>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger departmentDelete" id="${element.id}">Delete</button>
+                                <button type="button" class="btn btn-danger departmentDelete" id="delete${element.id}">Delete</button>
+                            </td>
+                        </tr>
+                    `)
+                    $(`#edit${element.id}`).on("click", ()=> {
+                        let department = element.id
+                        $.ajax({
+                            url: "libs/php/getDepartmentByID.php",
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                id: department,
+                                action: "byID"
+                            },    
+                            success: function(result) {
+                                $("#departmentsFooter").html(`
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-success" id="editDepartmentConfirmation">Confirm</button>
+                                `)          
+
+                                $("#departmentName").val(result.data[0].name)
+                                $("#manageDepartmentsModal").modal("show");
+
+                                populateLocationsDropdown("#locationsDropdown", ()=> {
+                                    $("#locationsDropdown").val(result.data[0].locationID).change()
+                                })
+                                
+                                $("#editDepartmentConfirmation").on("click", function() {
+                                    if($("#departmentName").val() === ""){
+                                        $("#departmentNameError")
+                                        .text("Please enter a valid location name.")
+                                        .css(cssError)
+                                    } else {
+                                    $.ajax({
+                                            url: `libs/php/updateHandler.php`,
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            data: {
+                                                action: "department",
+                                                name: $("#departmentName").val(),
+                                                locationID: $("#locationsDropdown").val(),
+                                                id: department
+                                            },  
+                                            success: function() {
+                                                $("#manageDepartmentsModal").modal("hide")
+                                                checkState()
+                                            },
+                                            error: function(jqXHR, textStatus, errorThrown) {
+                                                console.log(textStatus);
+                                                console.log(errorThrown);
+                                            }
+                                        }); 
+                                    }
+                                })
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                            }
+                        });
+                    })
+                     // CHECK DEPENDANCY BEFORE DELETING
+                    $(`#delete${element.id}`).on("click", ()=> {
+                        checkDepencency(element.id, "department")
+                    })
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
+    // OPEN ADD LOCATION MODAL AND POPULATE
+    $("#addDepartments").on("click", function(){
+        $("#manageDepartmentsModal").modal("show");
+        populateLocationsDropdown("#locationsDropdown")
+        $("#departmentName").val("")
+        $("#departmentNameError").text("")
+        $("#departmentsFooter").html(`
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" id="addDepartmentConfirmation">Confirm</button>
+        `)
+        // ADD DEPARTMENT
+        $("#addDepartmentConfirmation").on("click", function() {
+            if($("#departmentName").val() === "" || !$("#departmentName").val().match(/^([^0-9]*)$/)){
+                $("#departmentNameError")
+                    .text("Please enter a valid location name")
+                    .css(cssError)
+            } else {
+                $("#departmentNameError").text("")
+                $.ajax({
+                    url: `libs/php/insertDepartment.php`,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        name: $("#departmentName").val(),
+                        locationID: $("#locationsDropdown").val()
+                    },  
+                    success: function() {
+                        checkState()
+                        $("#manageDepartmentsModal").modal("hide")
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                });
+            } 
+        })
+    })
+}
+
+const populateEmployees = () => {
+    $.ajax({
+        url: "libs/php/getAll.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+        },
+        success: function(result) {
+            
+            if (result.status.name == "ok") {
+                let users = result.data;
+                users.forEach(element => {
+                    let id = element.id;
+                    $("#tableBody").append(`
+                        <tr id="tableHeaderNames">
+                            <td>${element.firstName} ${element.lastName}</td>
+                            <td>${element.location}</td>
+                            <td>${element.department}</td>
+                            <td>
+                                <button type="button" class="btn btn-warning edit" id="edit${element.id}">Edit</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger delete" id="delete${element.id}">Delete</button>
                             </td>
                         </tr>
                     `)
 
-                    //
+                    // EDIT EMPLOYEES ONCLICK FUNCTION
+                    $(`#edit${element.id}`).on("click", ()=> {
+                        let personnelData;
+                        $("#nameError, #lastNameError, #emailError").text("")
+                        $("#mangeEmployeesFooter").html(`
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"  id="editEmployeeConfirm">Confirm</button>
+                        `)
                     
+                        $.ajax({
+                            url: "libs/php/getPersonnelByID.php",
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                id: id
+                            },
+                            success: function(result) {
+                                personnelData = result
+                                
+                                $("#manageEmployeesModal").modal("show")
+                                $("#firstName").val(personnelData.data.personnel[0].firstName)
+                                $("#lastName").val(personnelData.data.personnel[0].lastName)
+                                $("#email").val(personnelData.data.personnel[0].email)
+                                setInterval(() => {
+                                    $("#employeeLocation").on("change", () => {
+                                    getDepartmentsOfLocation($("#employeeLocation").val(), "#employeeDepartment")
+                                })
+                                }, 1000);
+                                
+                                let employeeDepartmentID = (personnelData.data.personnel[0].departmentID -1);
+                                let employeeCity = result.data.department[employeeDepartmentID].locationID;
+
+                                populateLocationsDropdown("#addEmployeeLocation", ()=>{
+                                    $("#addEmployeeLocation").val(employeeCity).change()
+                                })
+                                getDepartmentsOfLocation(employeeCity, "#addDepartments", ()=> {
+                                    $("#addDepartments").val(result.data.personnel[0].departmentID).change()
+                                })
+                                
+                                // CHECK INPUT FIELDS ARE VALID
+                                
+                                $("#editEmployeeConfirm").on("click", function(event) {
+                                    let editFirstName = "";
+                                    let editLastName = "";
+                                    let editEmail = "";
+                                    if($("#firstName").val() === "") {
+                                        editFirstName = "Please provide a first name."
+                                        $("#nameError")
+                                        .css(cssError)
+                                        .text(editFirstName)
+                                    } else {
+                                        $("#nameError").text("")
+                                        editFirstName = ""
+                                    }
+                                    if($("#lastName").val() === "") {
+                                        editLastName = "Please provide a last name."
+                                        $("#lastNameError")
+                                        .css(cssError)
+                                        .text(editLastName)
+                                    } else {
+                                        $("#lastNameError").text("")
+                                        editLastName = ""
+                                    }
+                                    if($("#email").val() === "") {
+                                        editEmail = "Please enter an email address."
+                                        $("#emailError")
+                                        .css(cssError)
+                                        .text(editEmail)
+                                    } else {
+                                        if(validateEmail($("#email").val())){
+                                            $("#emailError")
+                                            .text("")
+                                            editEmail = ""
+                                        } else{
+                                            editEmail = "Please provide a valid email address."
+                                            $("#emailError")
+                                            .css(cssError)
+                                            .text(editEmail)
+                                        }
+                                        
+                                    }
+                                    if(editFirstName != "" || editLastName != "" || editEmail != "") {
+                                        return false
+                                    } else {
+                                        // UPDATE EMPLOYEE DEATAILS
+                                        event.preventDefault()
+                                        $("#manageEmployeesModal").modal("toggle")
+                                        $.ajax({
+                                            url: `libs/php/updateHandler.php`,
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            data: {
+                                                action: "employee",
+                                                firstName: $("#firstName").val(),
+                                                lastName: $("#lastName").val(),
+                                                email: $("#email").val(),
+                                                departmentID: $("#addDepartments").val(),
+                                                id: id
+                                            },  
+                                            success: function() {
+                                                checkState()
+                                            },
+                                            error: function(jqXHR, textStatus, errorThrown) {
+                                                console.log(textStatus);
+                                                console.log(errorThrown);
+                                            }
+                                        });
+                                    }
+                                })
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                            }
+                        }); 
+                    })
+
+                    //OPEN MODAL AND DELETE EMPLOYEE
+                    $(`#delete${id}`).on("click", ()=> {
+                        $("#deleteBody > h5").text("Are you sure?")
+                        $("#deleteBody > p").text("Do you really want to delete this record? This process cannot be undone.")
+                        $("#deleteConfirmation").css({display: "block"})
+
+                        $('#deleteEmployeeModal').modal("show");
+                    
+                        // DELETE EMPLOYEE FROM DB
+                        $("#deleteConfirmation").on("click", function(){
+                            $("#deleteEmployeeModal").modal("toggle")
+                            $.ajax({
+                                url: "libs/php/deletePersonnel.php",
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    id: id
+                                },
+                                success: function() {
+                                    checkState()
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    console.log(textStatus);
+                                    console.log(errorThrown);
+                                }
+                            });
+                            
+                        })
+                    })
                 });
-                
             }
         
         },
@@ -729,9 +544,103 @@ const populateDepartments = () => {
             console.log(errorThrown);
         }
     });
+    // OPEN ADD EMPLOYEE MODAL AND POPULATE
+    $("#addEmployee").on("click", function(){
+        let id;
+        $("#manageEmployeesModal").modal("show")
+        $("#nameError, #lastNameError, #emailError").text("")
+        $("#firstName, #lastName, #email").val("")
+        $("#mangeEmployeesFooter").html(`
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary"  id="createNewEmployee">Confirm</button>
+        `)
+        $("#addEmployeeLocation").on("change", function(){
+            id = this.value
+        })
+        $("#addEmployeeLocation").on("change", ()=> {
+            getDepartmentsOfLocation(id, "#addDepartments")
+        })
+        populateLocationsDropdown("#addEmployeeLocation")
+        getDepartmentsOfLocation(1, "#addDepartments")
+
+        $("#createNewEmployee").on("click", function(event){
+            event.preventDefault();
+            let firstName = "";
+            let lastName = "";
+            let email = "";
+            if($("#firstName").val() === "") {
+                firstName = "Please provide a first name."
+                $("#nameError")
+                .css(cssError)
+                .text(firstName)
+            } else {
+                $("#nameError").text("")
+                firstName = ""
+            }
+            // test
+            if($("#lastName").val() === "") {
+                lastName = "Please provide a last name."
+                $("#lastNameError")
+                .css(cssError)
+                .text(lastName)
+            } else {
+                $("#lastNameError").text("")
+                lastName = ""
+            }
+            // if($("#lastName").val() === "") {
+            //     lastName = "Please provide a last name."
+            //     $("#lastNameError")
+            //     .css(cssError)
+            //     .text(lastName)
+            // } else {
+            //     $("#LastNameError").text("")
+            //     lastName = ""
+            // }
+            if($("#email").val() === "") {
+                email = "Please enter an email address."
+                $("#emailError")
+                .css(cssError)
+                .text(email)
+            } else {
+                if(validateEmail($("#email").val())){
+                    $("#emailError").text("")
+                    email = ""
+                } else{
+                    email = "Please provide a valid email address."
+                    $("#emailError")
+                    .css(cssError)
+                    .text(email)
+                }
+                
+            }
+            if(firstName != "" || lastName != "" || email != "") {
+                return false
+            } else {
+                $.ajax({
+                    url: `libs/php/insertPersonnel.php`,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        firstName: $("#firstName").val(),
+                        lastName: $("#lastName").val(),
+                        email: $("#email").val(),
+                        locationID: $("#addDepartments").val() 
+                    },  
+                    success: function() {
+                        checkState()
+                        $("#manageEmployeesModal").modal("toggle")
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                }); 
+            }
+        })
+    })
 }
 
-// FUNCTIONS
+// HELPER FUNCTIONS
 const populateLocationsDropdown = (idSelector, callback) => {
     $.ajax({
         url: "libs/php/getAllLocations.php",
@@ -741,7 +650,8 @@ const populateLocationsDropdown = (idSelector, callback) => {
             action: "all"
         },  
         success: function(result) {
-            
+            $(`${idSelector}`).find("option")
+            .remove()
             let data = result.data
             data.forEach(location => {
                 $("<option>", {
@@ -799,54 +709,7 @@ const validateEmail = (email) => {
     );
   };
 
-
-//   SEARCH FUNCTON
-
-$("#searchButton").on("click", function(event){
-    event.preventDefault()
-    if(state != "" && state != "all") {
-        state = ""
-        checkState()
-    }
-    
-    $.ajax({
-        url: "libs/php/searchPersonnel.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            action: $("#searchOptions").val(),
-            search: $("#searchBar").val(),
-        },  
-        success: function(result) {
-            
-            $("#tableBody").empty()
-            result.data.forEach(element => {
-                $("#tableBody")
-                .append(
-                    `<tr id="tableHeaderNames">
-                        <td>${element.firstName} ${element.lastName}</td>
-                        <td>${element.location}</td>
-                        <td>${element.department}</td>
-                        <td>
-                            <button type="button" class="btn btn-warning edit" id="${element.id}">Edit</button>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger delete" id="${element.id}">Delete</button>
-                        </td>
-                    </tr>`)
-                
-            })
-        
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-            console.log(errorThrown);
-        }
-    });
-})
-
 const checkDepencency = (value, target) => {
-
     $.ajax({
         url: "libs/php/checkDependencies.php",
         type: 'POST',
@@ -912,6 +775,58 @@ const checkDepencency = (value, target) => {
     
 }
 
+const changeButton = (idName, buttonText) => {
+    $("#changeButton").html(`
+        <button type="button" class="btn btn-dark" id="${idName}">${buttonText}</button>
+    `)
+    
+}
+
+//   SEARCH FUNCTON
+$("#searchButton").on("click", function(event){
+    event.preventDefault()
+    if(state != "" && state != "all") {
+        state = ""
+        checkState()
+    }
+    
+    $.ajax({
+        url: "libs/php/searchPersonnel.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            action: $("#searchOptions").val(),
+            search: $("#searchBar").val(),
+        },  
+        success: function(result) {
+            
+            $("#tableBody").empty()
+            result.data.forEach(element => {
+                $("#tableBody")
+                .append(
+                    `<tr id="tableHeaderNames">
+                        <td>${element.firstName} ${element.lastName}</td>
+                        <td>${element.location}</td>
+                        <td>${element.department}</td>
+                        <td>
+                            <button type="button" class="btn btn-warning edit" id="${element.id}">Edit</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger delete" id="${element.id}">Delete</button>
+                        </td>
+                    </tr>`)
+                
+            })
+        
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
+})
+
+// VARIABLES
 let cssError = {
         color: "red",
         "font-size": "0.9em"
