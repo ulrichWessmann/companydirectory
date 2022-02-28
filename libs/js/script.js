@@ -37,7 +37,7 @@ const checkState = () => {
         <thead class="sticky-top border-bottom" id="headingSelection">
         <tr id="tableHeaderNames">
         <th scope="col">Name</th>
-        <th scope="col">Location</th>
+        <th scope="col" class="smallDisplays">Location</th>
         <th scope="col">Department</th>
         <th scope="col"></th>
         <th scope="col"></th>
@@ -378,7 +378,7 @@ const populateEmployees = () => {
                     $("#tableBody").append(`
                         <tr id="tableHeaderNames">
                             <td>${element.firstName} ${element.lastName}</td>
-                            <td>${element.location}</td>
+                            <td class="smallDisplays">${element.location}</td>
                             <td>${element.department}</td>
                             <td>
                                 <button type="button" class="btn btn-warning edit" id="edit${element.id}">Edit</button>

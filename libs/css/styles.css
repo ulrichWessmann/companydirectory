@@ -15,7 +15,7 @@
 
 /* Hide employee locations when screen size is smaller than 425px */
 @media only screen and (max-width: 425px) {
-  #tableHeaderNames > td:nth-child(2), #tableHeaderNames > th:nth-child(2) {
+  .smallDisplays {
     display: none;
   }
   #changeButton {
