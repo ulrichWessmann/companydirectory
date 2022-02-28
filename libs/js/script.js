@@ -130,7 +130,7 @@ const populateLocations = () => {
                             `)
                     
                         $.ajax({
-                            url: "libs/php/getAlllocations.php",
+                            url: "libs/php/getAllLocations.php",
                             type: 'POST',
                             dataType: 'json',
                             data: {

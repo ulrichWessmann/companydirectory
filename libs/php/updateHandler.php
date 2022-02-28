@@ -1,16 +1,6 @@
 <?php
 
-	// example use from browser
-	// http://localhost/companydirectory/libs/php/insertDepartment.php?name=New%20Department&locationID=<id>
-
-	// remove next two lines for production
-	
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
-	
-	// this includes the login details
 	
 	include("config.php");
 
@@ -35,14 +25,13 @@
 	}	
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
 	// UPDATE DEPARTMENT BY ID
-	if( $_REQUEST['action'] === "department" ){
+	if( $_POST['action'] === "department" ){
 
 		$query = $conn->prepare('UPDATE department SET name = ?, locationID = ? WHERE id = ?');
 
-		$query->bind_param("sii", $_REQUEST['name'], $_REQUEST['locationID'], $_REQUEST['id']);
+		$query->bind_param("sii", $_POST['name'], $_POST['locationID'], $_POST['id']);
 
 		$query->execute();
 		
@@ -74,11 +63,11 @@
 
 	} 
 	// UPDATE LOCATIONS
-	elseif( $_REQUEST['action'] === "location" ){
+	elseif( $_POST['action'] === "location" ){
 
 		$query = $conn->prepare('UPDATE location SET name = ? WHERE id = ?');
 
-		$query->bind_param("si", $_REQUEST['name'], $_REQUEST['id']);
+		$query->bind_param("si", $_POST['name'], $_POST['id']);
 
 		$query->execute();
 		
@@ -109,11 +98,11 @@
 
 	}
 
-	elseif( $_REQUEST['action'] === "employee" ){
+	elseif( $_POST['action'] === "employee" ){
 
 		$query = $conn->prepare('UPDATE personnel SET firstName = ?, lastName = ?,  email = ?, departmentID = ? WHERE id = ?');
 
-		$query->bind_param("sssii", $_REQUEST['firstName'],  $_REQUEST['lastName'], $_REQUEST['email'], $_REQUEST['departmentID'], $_REQUEST['id']);
+		$query->bind_param("sssii", $_POST['firstName'],  $_POST['lastName'], $_POST['email'], $_POST['departmentID'], $_POST['id']);
 
 		$query->execute();
 		

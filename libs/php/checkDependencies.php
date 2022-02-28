@@ -1,13 +1,5 @@
 <?php
 
-	// example use from browser
-	// http://localhost/companydirectory/libs/php/getPersonnelByID.php?id=<id>
-
-	// remove next two lines for production
-	
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
 
 	include("config.php");
@@ -33,13 +25,12 @@
 	}	
 
 	// first query - SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	if($_REQUEST['action'] === "department") {
+	if($_POST['action'] === "department") {
 
 		$query = $conn->prepare('SELECT * from personnel WHERE departmentID = ?');
 
-		$query->bind_param("i", $_REQUEST['search']);
+		$query->bind_param("i", $_POST['search']);
 
 		$query->execute();
 		
@@ -79,11 +70,11 @@
 		echo json_encode($output); 
 
 
-	} elseif ($_REQUEST['action'] === "location") {
+	} elseif ($_POST['action'] === "location") {
 		
 		$query = $conn->prepare('SELECT * from department WHERE locationID = ?');
 
-		$query->bind_param("i", $_REQUEST['search']);
+		$query->bind_param("i", $_POST['search']);
 
 		$query->execute();
 		

@@ -1,13 +1,5 @@
 <?php
 
-	// example use from browser
-	// http://localhost/companydirectory/libs/php/getAll.php
-
-	// remove next two lines for production
-	
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
 
 	include("config.php");
@@ -34,13 +26,11 @@
 
 	// SQL does not accept parameters and so is not prepared
 
-	if($_REQUEST["action"] === "all"){
+	if($_POST["action"] === "all"){
 		// Search both first and last name fields
-		$search = preg_replace('/\s+/', '%', $_REQUEST['search']);
+		$search = preg_replace('/\s+/', '%', $_POST['search']);
 		
 		$query = $conn->prepare('SELECT p.lastName, p.firstName, p.jobTitle, p.email, p.id, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) WHERE CONCAT(firstName, " ", lastName) LIKE "'.$search.'%" ORDER BY p.lastName, p.firstName, d.name, l.name');
-
-		// $query->bind_param("ss", $_REQUEST['search'], $_REQUEST['search2']);
 	
 		$query->execute();
 		
@@ -78,11 +68,10 @@
 	
 		mysqli_close($conn);
 
-	} elseif($_REQUEST["action"] === "firstName"){
+	} elseif($_POST["action"] === "firstName"){
 
-		$query = $conn->prepare('SELECT p.lastName, p.firstName, p.jobTitle, p.email, p.id, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) WHERE firstName LIKE "'.$_REQUEST['search'].'%" ORDER BY p.lastName, p.firstName, d.name, l.name');
+		$query = $conn->prepare('SELECT p.lastName, p.firstName, p.jobTitle, p.email, p.id, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) WHERE firstName LIKE "'.$_POST['search'].'%" ORDER BY p.lastName, p.firstName, d.name, l.name');
 
-		// $query->bind_param("s", $_REQUEST['search']);
 	
 		$query->execute();
 		
@@ -120,12 +109,10 @@
 	
 		mysqli_close($conn);
 
-	} elseif($_REQUEST["action"]  === "lastName"){
+	} elseif($_POST["action"]  === "lastName"){
 
 
-		$query = $conn->prepare('SELECT p.lastName, p.firstName, p.jobTitle, p.email, p.id, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) WHERE lastName LIKE "'.$_REQUEST['search'].'%" ORDER BY p.lastName, p.firstName, d.name, l.name');
-
-		// $query->bind_param("s", $_REQUEST['search']);
+		$query = $conn->prepare('SELECT p.lastName, p.firstName, p.jobTitle, p.email, p.id, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) WHERE lastName LIKE "'.$_POST['search'].'%" ORDER BY p.lastName, p.firstName, d.name, l.name');
 	
 		$query->execute();
 		

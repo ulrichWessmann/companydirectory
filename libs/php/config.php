@@ -1,6 +1,6 @@
 
 <?php
-
+	include("login.php");
 	// connection details for MySQL database
 	
 	$cd_host = "127.0.0.1";
@@ -9,8 +9,8 @@
 
 	// database name, username and password
 
-	$cd_dbname = getenv('DBNAME');
-	$cd_user = getenv('NAME');
-	$cd_password = getenv('PASSWORD');
+	$cd_dbname = $DBNAME;
+	$cd_user = $USER;
+	$cd_password = $PASSWORD;
 
 ?>

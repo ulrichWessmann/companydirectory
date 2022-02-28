@@ -1,13 +1,5 @@
 <?php
 
-	// example use from browser
-	// http://localhost/companydirectory/libs/php/insertDepartment.php?name=New%20Department&locationID=<id>
-
-	// remove next two lines for production
-	
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
 	
 	// this includes the login details
@@ -35,11 +27,10 @@
 	}	
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
 	$query = $conn->prepare('INSERT INTO personnel (firstName, lastName, email, departmentID) VALUES(?,?,?,?)');
 
-	$query->bind_param("sssi", $_REQUEST['firstName'], $_REQUEST['lastName'], $_REQUEST['email'], $_REQUEST['locationID']);
+	$query->bind_param("sssi", $_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['locationID']);
 
 	$query->execute();
 	

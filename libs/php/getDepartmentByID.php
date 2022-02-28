@@ -1,13 +1,5 @@
 <?php
 
-	// example use from browser
-	// http://localhost/companydirectory/libs/php/getDepartmentByID.php?id=<id>
-
-	// remove next two lines for production	
-
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
 
 	include("config.php");
@@ -33,15 +25,14 @@
 	}	
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
 	// IF STATEMENT TO SEPERATE REQUEST TYPE
 
-	if($_REQUEST["action"] === "byID") { // get result for all
+	if($_POST["action"] === "byID") { // get result for all
 
 	$query = $conn->prepare('SELECT id, name, locationID FROM department WHERE id =  ?');
 
-	$query->bind_param("i", $_REQUEST['id']);
+	$query->bind_param("i", $_POST['id']);
 
 	$query->execute();
 	
@@ -80,11 +71,11 @@
 	mysqli_close($conn);
 
 
-	} elseif ($_REQUEST["action"] === "byLocation") { //get result by location
+	} elseif ($_POST["action"] === "byLocation") { //get result by location
 
 	$query = $conn->prepare('SELECT * FROM `department` WHERE locationID = ?');
 
-	$query->bind_param("i", $_REQUEST['id']);
+	$query->bind_param("i", $_POST['id']);
 
 	$query->execute();
 	
