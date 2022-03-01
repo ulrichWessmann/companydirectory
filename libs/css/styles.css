@@ -1,7 +1,9 @@
+/* Check dependency image displayed in modal */
 #cannotDeleteImg {
   height: 100px;
 }
 
+/* SVG background */
 .spacer {
     aspect-ratio: 960/300;
     width: 100%;
@@ -14,13 +16,21 @@
  }
 
 /* Hide employee locations when screen size is smaller than 425px */
-@media only screen and (max-width: 425px) {
-  .smallDisplays {
+@media only screen and (max-width: 768px) {
+  .smallDisplays, .hideMe {
     display: none;
   }
   #changeButton {
-    padding: 10px 0;
     justify-content: flex-start !important;
+  }
+  .addEmployee {
+    width: 100%
+  }
+}
+/* Hide extra information on mobile screens */
+@media only screen and (max-width: 1440px) {
+  .hideMe {
+    width: 70px;
   }
 }
 
@@ -28,4 +38,14 @@
 .table-striped > tbody > tr:nth-of-type(odd) > * {
   --bs-table-accent-bg: #c7fdc14d;
   color: var(--bs-table-striped-color);
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.btn-primary {
+  color: rgb(255, 255, 255);
+  background-color: #5fb491;
+  border-color: #5fb491;
 }

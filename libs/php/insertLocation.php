@@ -24,39 +24,64 @@
 
 		exit;
 
-	}	
+	}
 
-	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
+	$errorArray = [];
 
-	$query = $conn->prepare('INSERT INTO location (name) VALUES(?)');
-
-	$query->bind_param("s", $_POST['name']);
-
-	$query->execute();
-	
-	if (false === $query) {
-
-		$output['status']['code'] = "400";
-		$output['status']['name'] = "executed";
-		$output['status']['description'] = "query failed";	
-		$output['data'] = [];
+	if(strlen($_POST['name']) > 30) {
+		array_push($errorArray,"location");
+	}
+	if(count($errorArray) > 0) {	
+		http_response_code(300);
+		
+		$output['status']['code'] = "300";
+		$output['status']['name'] = "failure";
+		$output['status']['description'] = "unable to add to database";
+		$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
+		$output['data'] = $errorArray;
 
 		mysqli_close($conn);
 
-		echo json_encode($output); 
+		echo json_encode($output);
 
 		exit;
+	} else {
+
+		$query = $conn->prepare('INSERT INTO location (name) VALUES(?)');
+
+		$query->bind_param("s", $_POST['name']);
+
+		$query->execute();
+		
+		if (false === $query) {
+
+			$output['status']['code'] = "400";
+			$output['status']['name'] = "executed";
+			$output['status']['description'] = "query failed";	
+			$output['data'] = [];
+
+			mysqli_close($conn);
+
+			echo json_encode($output); 
+
+			exit;
+
+		}
+
+		$output['status']['code'] = "200";
+		$output['status']['name'] = "ok";
+		$output['status']['description'] = "success";
+		$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
+		$output['data'] = [];
+		
+		mysqli_close($conn);
+
+		echo json_encode($output); 	
 
 	}
 
-	$output['status']['code'] = "200";
-	$output['status']['name'] = "ok";
-	$output['status']['description'] = "success";
-	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
-	
-	mysqli_close($conn);
+	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 
-	echo json_encode($output); 
+
 
 ?>
