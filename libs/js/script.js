@@ -102,7 +102,6 @@ const checkState = () => {
  };
 
 // TABLE POPULATION FUNCTIONS
-
 const populateLocations = () => {
     $.ajax({
         url: "libs/php/getAllLocations.php",
@@ -573,12 +572,14 @@ const populateDepartmentsDropDown = (idSelector, htmlTarget, callback) => {
             let data = result.data;
             let select;
 
+            // REPLACE HMTL ON EACH CALL
             if(htmlTarget){
                 data.forEach(location => {
                     select += `<option value=${location.id}>${location.name}</option>`
                 })
                 $(idSelector).html(select)
             } else {
+                // REMOVE PREVIOUS SELECTION AND REPOPULATE
                $(`${idSelector}`)
                 .find("option")
                 .remove();
@@ -849,6 +850,7 @@ const employeeDelete = (id) => {
     })
 }
 
+// NOT BEING USED, INCASE A NAME/SURNAME BREAKS TABLE DATA FIELD
 const truncate = (element) => {
     let elipse = "..."
     if(element.length > 10){
