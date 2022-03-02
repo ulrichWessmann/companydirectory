@@ -9,8 +9,8 @@
 
 	// database name, username and password
 
-	$cd_dbname = $DBNAME;
-	$cd_user = $USER;
-	$cd_password = $PASSWORD;
+	$cd_dbname = $test;
+	$cd_user = $test;
+	$cd_password = $test;
 
 ?>

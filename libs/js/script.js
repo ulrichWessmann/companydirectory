@@ -32,16 +32,18 @@ const checkState = () => {
         $(".table").html(`
         <thead class="sticky-top border-bottom" id="headingSelection">
         <tr id="tableHeaderNames">
-        <th scope="col">Name</th>
-        <th scope="col" class="smallDisplays">Email</th>
-        <th scope="col" class="smallDisplays">Location</th>
+        <th class="text-truncate">Name</th>
+        <th class="smallDisplays">Email</th>
+        <th class="smallDisplays">Location</th>
         <th scope="col">Department</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
+        <th ></th>
+        <th ></th>
         </tr>
         </thead>
         <tbody id="tableBody"></tbody>
         `);
+        
+        
 
         changeButton("addEmployee", "Add Employees");
         $("#searchBar").val("").change();
@@ -129,66 +131,42 @@ const populateLocations = () => {
                             </td>
                         </tr>
                     `);
+                    $("#myMobileTable > tbody").append(`
+                        <tr  id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne${element.id}" aria-expanded="true" aria-controls="collapseOne">
+                            <td colspan="12">${element.name}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="12" class="">
+                                <div id="collapseOne${element.id}" class="accordion-collapse collapse sow" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body p-0">
+                                        <div class="col">
+                                            <div class="row py-2">
+                                                <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class=" col-12 btn btn-warning edit mw-100" id="editMobile${element.id}" alt="Max-width 100%">Edit</button></div>
+                                                <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class="col-12 btn btn-danger delete mw-100" id="deleteMobile${element.id}" alt="Max-width 100%">Delete</button></div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </td>
+                        </tr>
+                    `);
 
                     $(`#edit${id}`).on("click", function() {
-                        $("#locationSpanError").text("");
-                        $("#locationsFooter").html(`
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-success" id="confirmUpdatingLocation">Confirm</button>
-                            `);
-                    
-                        $.ajax({
-                            url: "libs/php/getAllLocations.php",
-                            type: 'POST',
-                            dataType: 'json',
-                            data: {
-                                action: "single",
-                                id: id
-                            },    
-                            success: function(result) {
-                                let locationName = result.data[0].name;
-                                $("#locationName").val(locationName);
-                                $("#locationText").text("Location:");
-                                $("#manageLocationsModal").modal("show");
-                    
-                                $("#confirmUpdatingLocation").on("click", function(){
-                                    if($("#locationName").val() === "" || !$("#locationName").val().match(/^([^0-9]*)$/)){
-                                        $("#locationSpanError")
-                                        .text("Please enter a valid location name.")
-                                        .css(cssError)
-                                    } else {
-                                        $.ajax({
-                                            url: `libs/php/updateHandler.php`,
-                                            type: 'POST',
-                                            dataType: 'json',
-                                            data: {
-                                                action: "location",
-                                                name: $("#locationName").val(),
-                                                id: id
-                                            },  
-                                            success: function() {
-                                                $("#manageLocationsModal").modal("toggle");
-                                                checkState();
-                                            },
-                                            error: function(jqXHR, textStatus, errorThrown) {
-                                                console.log(textStatus);
-                                                console.log(errorThrown);
-                                            }
-                                        });
-                                    }
-                                })
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                console.log(textStatus);
-                                console.log(errorThrown);
-                            }
-                        });
-                        
+                        locationEdit(id)
                     });
                     // CHECK DEPENDANCY BEFORE DELETING
                     $(`#delete${id}`).on("click", ()=> {
                         checkDepencency(id, "location");
                     })
+                    // MOBILE CLICK FUNCTION
+                    $(`#editMobile${id}`).on("click", function() {
+                        locationEdit(id)
+                    });
+                    // CHECK DEPENDANCY BEFORE DELETING
+                    $(`#deleteMobile${id}`).on("click", ()=> {
+                        checkDepencency(id, "location");
+                    })
+
                 }); 
             }
         },
@@ -262,65 +240,38 @@ const populateDepartments = () => {
                             </td>
                         </tr>
                     `);
+                    $("#myMobileTable > tbody").append(`
+                        <tr  id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne${element.id}" aria-expanded="true" aria-controls="collapseOne">
+                            <td colspan="12">${element.name}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="12" class="">
+                                <div id="collapseOne${element.id}" class="accordion-collapse collapse sow" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body p-0">
+                                        <div class="col">
+                                            <div class="row py-2">
+                                                <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class=" col-12 btn btn-warning edit mw-100" id="editMobile${element.id}" alt="Max-width 100%">Edit</button></div>
+                                                <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class="col-12 btn btn-danger delete mw-100" id="deleteMobile${element.id}" alt="Max-width 100%">Delete</button></div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </td>
+                        </tr>
+                    `);
                     $(`#edit${element.id}`).on("click", ()=> {
-                        let department = element.id;
-                        $.ajax({
-                            url: "libs/php/getDepartmentByID.php",
-                            type: 'POST',
-                            dataType: 'json',
-                            data: {
-                                id: department,
-                                action: "byID"
-                            },    
-                            success: function(result) {
-                                $("#departmentsFooter").html(`
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-success" id="editDepartmentConfirmation">Confirm</button>
-                                `);       
-
-                                $("#departmentName").val(result.data[0].name);
-                                $("#manageDepartmentsModal").modal("show");
-
-                                populateLocationsDropdown("#locationsDropdown", "selection", ()=> {
-                                    $("#locationsDropdown").val(result.data[0].locationID).change();
-                                })
-                                
-                                $("#editDepartmentConfirmation").on("click", function() {
-                                    if($("#departmentName").val() === ""){
-                                        $("#departmentNameError")
-                                        .text("Please enter a valid location name.")
-                                        .css(cssError)
-                                    } else {
-                                    $.ajax({
-                                            url: `libs/php/updateHandler.php`,
-                                            type: 'POST',
-                                            dataType: 'json',
-                                            data: {
-                                                action: "department",
-                                                name: $("#departmentName").val(),
-                                                locationID: $("#locationsDropdown").val(),
-                                                id: department
-                                            },  
-                                            success: function() {
-                                                $("#manageDepartmentsModal").modal("hide");
-                                                checkState();
-                                            },
-                                            error: function(jqXHR, textStatus, errorThrown) {
-                                                console.log(textStatus);
-                                                console.log(errorThrown);
-                                            }
-                                        }); 
-                                    }
-                                })
-                            },
-                            error: function(jqXHR, textStatus, errorThrown) {
-                                console.log(textStatus);
-                                console.log(errorThrown);
-                            }
-                        });
+                        departmentEdit(element.id)  
                     })
                      // CHECK DEPENDANCY BEFORE DELETING
                     $(`#delete${element.id}`).on("click", ()=> {
+                        checkDepencency(element.id, "department");
+                    })
+                    // MOBILE CLICK EVENTS
+                    $(`#editMobile${element.id}`).on("click", ()=> {
+                        departmentEdit(element.id)  
+                    })
+                     // CHECK DEPENDANCY BEFORE DELETING
+                    $(`#deleteMobile${element.id}`).on("click", ()=> {
                         checkDepencency(element.id, "department");
                     })
                 });
@@ -399,15 +350,55 @@ const populateEmployees = () => {
                             </td>
                         </tr>
                     `);
+                    $("#myMobileTable > tbody").append(`
+                        <tr  id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne${element.id}" aria-expanded="true" aria-controls="collapseOne" class="">
+                            <td>${element.firstName} ${element.lastName}</td>
+                                <td>${element.department}</td>
+                                <td></td>
+                                <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="12">
+                                <div id="collapseOne${element.id}" class="accordion-collapse collapse sow" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body p-0">
+                                        <div class="col">
+                                            <div class="row py-2">
+                                                <div class="col-6 text-break text-wrap">Email:</div>
+                                                <div class="col-6 text-break text-wrap">${element.email}</div>
+                                            </div>
+                                            <div class="row py-2">
+                                                <div class="col-6 text-break text-wrap">Location:</div>
+                                                <div class="col-6 text-break text-wrap">${element.location}</div>
+                                            </div>
+                                            <div class="row pb-2">
+                                                <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class=" col-12 btn btn-warning edit mw-100" id="editMobile${element.id}" alt="Max-width 100%">Edit</button></div>
+                                                <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class="col-12 btn btn-danger delete mw-100" id="deleteMobile${element.id}" alt="Max-width 100%">Delete</button></div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </td>
+                        </tr>
+                    `);
+
+
 
                     // EDIT EMPLOYEES ONCLICK FUNCTION
                     
                     $(`#edit${element.id}`).on("click", ()=> {
                         employeeEdit(id);
                     })
+                    // EDIT EMPLOYEES ONCLICK FUNCTION FOR MOBILE
+                    $(`#editMobile${element.id}`).on("click", ()=> {
+                        employeeEdit(id);
+                    })
 
                     //OPEN MODAL AND DELETE EMPLOYEE
                     $(`#delete${id}`).on("click", ()=> {
+                        employeeDelete(id);
+                    })
+                    //OPEN MODAL AND DELETE EMPLOYEE FOR MOBILE
+                    $(`#deleteMobile${id}`).on("click", ()=> {
                         employeeDelete(id);
                     })
                 });
@@ -850,17 +841,116 @@ const employeeDelete = (id) => {
     })
 }
 
-// NOT BEING USED, INCASE A NAME/SURNAME BREAKS TABLE DATA FIELD
-const truncate = (element) => {
-    let elipse = "..."
-    if(element.length > 10){
-        // slice and truncate
-        let shortElement = element.slice(0, 10)
-        let truncatedElement = shortElement.concat(elipse)
-        return truncatedElement;
-    } else {
-        return element;
-    }
+const locationEdit = (id) => {
+    $("#locationSpanError").text("");
+    $("#locationsFooter").html(`
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" id="confirmUpdatingLocation">Confirm</button>
+        `);
+
+    $.ajax({
+        url: "libs/php/getAllLocations.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            action: "single",
+            id: id
+        },    
+        success: function(result) {
+            let locationName = result.data[0].name;
+            $("#locationName").val(locationName);
+            $("#locationText").text("Location:");
+            $("#manageLocationsModal").modal("show");
+
+            $("#confirmUpdatingLocation").on("click", function(){
+                if($("#locationName").val() === "" || !$("#locationName").val().match(/^([^0-9]*)$/)){
+                    $("#locationSpanError")
+                    .text("Please enter a valid location name.")
+                    .css(cssError)
+                } else {
+                    $.ajax({
+                        url: `libs/php/updateHandler.php`,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: "location",
+                            name: $("#locationName").val(),
+                            id: id
+                        },  
+                        success: function() {
+                            $("#manageLocationsModal").modal("toggle");
+                            checkState();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                        }
+                    });
+                }
+            })
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    }); 
+}
+const departmentEdit = (id) => {
+    let department = id;
+    $.ajax({
+        url: "libs/php/getDepartmentByID.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            id: department,
+            action: "byID"
+        },    
+        success: function(result) {
+            $("#departmentsFooter").html(`
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="editDepartmentConfirmation">Confirm</button>
+            `);       
+
+            $("#departmentName").val(result.data[0].name);
+            $("#manageDepartmentsModal").modal("show");
+
+            populateLocationsDropdown("#locationsDropdown", "selection", ()=> {
+                $("#locationsDropdown").val(result.data[0].locationID).change();
+            })
+            
+            $("#editDepartmentConfirmation").on("click", function() {
+                if($("#departmentName").val() === ""){
+                    $("#departmentNameError")
+                    .text("Please enter a valid location name.")
+                    .css(cssError)
+                } else {
+                $.ajax({
+                        url: `libs/php/updateHandler.php`,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: "department",
+                            name: $("#departmentName").val(),
+                            locationID: $("#locationsDropdown").val(),
+                            id: department
+                        },  
+                        success: function() {
+                            $("#manageDepartmentsModal").modal("hide");
+                            checkState();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                        }
+                    }); 
+                }
+            })
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
 }
 
 const creationError = (array) => {
@@ -979,6 +1069,4 @@ let cssError = {
         color: "red",
         "font-size": "0.9em"
     };
-
-
-    
+   

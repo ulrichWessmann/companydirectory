@@ -26,19 +26,29 @@
   .addEmployee {
     width: 100%
   }
+  /* change table colors for mobile view */
+  .table-striped > tbody > tr:nth-of-type(4n + 1) > * {
+    --bs-table-accent-bg: rgba(0, 255, 128, 0.288);
+    color: var(--bs-table-striped-color);
+  }
+  .table-striped > tbody > tr:nth-of-type(4n + 3) > * {
+    --bs-table-accent-bg: rgba(157, 209, 224, 0.082);
+    color: var(--bs-table-striped-color);
+  }
+  .table-striped > tbody > tr:nth-of-type(even) > * {
+    --bs-table-accent-bg: white;
+    color: var(--bs-table-striped-color);
+  }
 }
 /* Hide extra information on mobile screens */
 @media only screen and (max-width: 1440px) {
   .hideMe {
     width: 70px;
   }
+  
 }
 
 /* change table colors */
-.table-striped > tbody > tr:nth-of-type(odd) > * {
-  --bs-table-accent-bg: #c7fdc14d;
-  color: var(--bs-table-striped-color);
-}
 
 body {
   overflow-x: hidden;
@@ -49,3 +59,9 @@ body {
   background-color: #5fb491;
   border-color: #5fb491;
 }
+
+
+/* .table-striped > tbody > tr:nth-of-type(3n) > * {
+  --bs-table-accent-bg: var(--bs-table-striped-bg);
+  color: var(--bs-table-striped-color);
+} */
