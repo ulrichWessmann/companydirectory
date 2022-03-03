@@ -15,45 +15,71 @@
 
 
     <!-- WEBPAGE HEADING AND BUTTONS -->
-    <div class="container-fluid">
+    <div class="container-fluid d-none d-lg-block">
       
-      <div class="row align-items-center">
+      <div class="row align-items-center ">
         <div class="col-lg-6 ">
           <h1 class="col text-center fw-bold pt-1 p-lg-5 text-uppercase">Company Directory</h1>
         </div>
         <div class="col-lg-6 p-lg-2 pb-2" >
           <div class="row align-items-center">
-            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="getEmployees" class="text-decoration-underline fw-bold fs-5">Employees</span></div>
-            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="getDepartments" class="text-decoration-underline fw-bold fs-5"> Departments</span></div>
-            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="getLocations" class="text-decoration-underline fw-bold fs-5"> Locations</button></div>
+            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class="text-decoration-underline fw-bold fs-5 getEmployees">Employees</span></div>
+            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class="text-decoration-underline fw-bold fs-5 getDepartments"> Departments</span></div>
+            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class="text-decoration-underline fw-bold fs-5 getLocations">Locations</button></div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- MOBILE BURGER MENU -->
+    <nav class="navbar navbar-light bg-transparent d-lg-none p-2">
+      <div class="container-fluid">
+          <h1 class="navbar-brand fs-3"><b>Company Directory</b></h1>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      </div>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="container">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <p role="button" class="getEmployees"id="">Employees</p>
+          </li>
+          <li class="nav-item active">
+            <p role="button" class="getDepartments" id="">Departments</p>
+          </li>
+          <li class="nav-item active">
+            <p role="button" class="getLocations" id="">Locations</p>
+          </li>
+          <form class="my-2">
+            <input class="form-control  searchBar" id="searchBarMobile" type="search" placeholder="Search Employees" aria-label="Search" >
+            <select name="filter" id="departmentFilterMobile" placeholder="" class="form-select my-2 departmentFilter"></select>
+            <!-- location -->
+            <select name="locations" id="locationFilterMobile" placeholder="" class="form-select my-2 locationFilter"></select>
+            <button class="btn btn-outline-success searchButton my-2" type="submit" id="searchButtonMobile">Search</button>
+            <button class="btn btn-outline-secondary resetButton my-2" type="submit" id="resetButton">Reset</button>
+          </form>
+          <!-- department -->
+          
+        </div>  
+      </div>
+    </nav>
+
     <!-- search -->
-    <div class="container-fluid ">
+    <div class="container-fluid d-none d-lg-block">
       <div class="row">
         <form class="col-sm-12 col-lg-6 ">
-          <input type="text" name="employee" id="searchBar" placeholder="Search Employees"  class="col-lg-3 col-12 my-1">
+          <input type="text" name="employee" id="searchBar" placeholder="Search Employees"  class="col-lg-3 col-12 my-1 searchBar ">
           <!-- department -->
-          <select name="filter" id="departmentFilter" placeholder="" class="form-select-sm my-1 col-lg-3 col-12 "></select>
+          <select name="filter" id="departmentFilter" placeholder="" class="form-select-sm my-1 col-lg-3 col-12 departmentFilter"></select>
           <!-- location -->
-          <select name="locations" id="locationFilter" placeholder="" class="form-select-sm my-1 col-lg-2 col-12 "></select>
-          <button class="btn btn-dark col-lg-1 col-md-2 col-5 hideMe searchButton" type="submit" id="searchButton">search</button>
-          <button class="btn btn-dark col-lg-1 col-md-2 col-5 hideMe resetButton" type="submit" id="resetButton">reset</button>
-          <div class="row d-lg-none d-xl-none justify-content-center py-2">
-            <div class="col">
-              <button class="btn btn-dark col-lg-1 col-12 searchButton" type="submit" id="searchButton">search</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-dark  col-lg-1 col-12 resetButton" type="submit" id="resetButton">reset</button>
-            </div>
-          </div>
+          <select name="locations" id="locationFilter" placeholder="" class="form-select-sm my-1 col-lg-2 col-12 locationFilter"></select>
+          <button class="btn btn-dark col-lg-1 col-md-2 col-5 hideMe searchButton" type="submit" id="searchButton">Search</button>
+          <button class="btn btn-dark col-lg-1 col-md-2 col-5 hideMe resetButton" type="submit" id="resetButton">Reset</button>
           
         </form>
         <div class="col-lg-6 col-12 align-self-end p-lg-1 pb-2 py-1">
-            <div class="d-flex justify-content-end px-lg-4 m-lg-0 col-12" id="changeButton"></div>
+            <div class="d-flex justify-content-end px-lg-4 m-lg-0 col-12 changeButton" id="changeButton"></div>
         </div> 
       </div>
         
@@ -61,11 +87,19 @@
     </div>
       
     <!-- table -->
+    <div class="container d-lg-none">
+      <div class="row">
+        <div class="col-lg-6 col-12 align-self-end p-lg-1 pb-2 py-1">
+            <div class="d-flex justify-content-end px-lg-4 m-lg-0 col-12 changeButton" id="changeButton"></div>
+        </div>
+      </div>
+    </div>
     <div class="overflow-auto d-flex  mt-sm-2 mt-lg-3 px-lg-3 px-2 d-none d-lg-block">
       <table class="table  table-sm table-light border table-striped mx-md-auto align-middle" id="myTable">
       </table>
     </div>
     <!-- mobile table -->
+    <!-- ADD BUTTON -->
     <div class="overflow-auto d-flex  mt-sm-2 mt-lg-3 px-lg-3 px-2 d-lg-none">
       <table class="table  table-sm table-light border table-striped mx-md-auto" id="myMobileTable">
         <thead class="sticky-top border-bottom" id="headingSelection"></thead>

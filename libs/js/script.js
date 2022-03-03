@@ -6,19 +6,19 @@ $(function(){
 
 
 //GET ALL EMPLOYEES 
-$("#getEmployees").on("click", () =>{
+$(".getEmployees").on("click", () =>{
     state = "all";
     checkState();
 })
 
 //GET ALL LOCATIONS 
-$("#getLocations").on("click", () =>{
+$(".getLocations").on("click", () =>{
     state = "location";
     checkState();
 })
 
 // GET ALL DEPARTMENTS 
-$("#getDepartments").on("click", () =>{
+$(".getDepartments").on("click", () =>{
     state = "departments";
     checkState();
 })
@@ -47,9 +47,10 @@ const checkState = () => {
 
         changeButton("addEmployee", "Add Employees");
         $("#searchBar").val("").change();
+        $("#searchBarMobile").val("").change();
 
-        populateLocationsDropdown("#locationFilter")
-        populateDepartmentsDropDown("#departmentFilter")
+        populateLocationsDropdown(".locationFilter")
+        populateDepartmentsDropDown(".departmentFilter")
 
         populateEmployees();
          
@@ -70,9 +71,10 @@ const checkState = () => {
 
         changeButton("addDepartments", "Add Departments")
         $("#searchBar").val("").change();
+        $("#searchBarMobile").val("").change();
 
-        populateLocationsDropdown("#locationFilter")
-        populateDepartmentsDropDown("#departmentFilter")
+        populateLocationsDropdown(".locationFilter")
+        populateDepartmentsDropDown(".departmentFilter")
 
         populateDepartments();
 
@@ -93,9 +95,10 @@ const checkState = () => {
 
         changeButton("addLocations", "Add Locations")
         $("#searchBar").val("").change();
+        $("#searchBarMobile").val("").change();
 
-        populateLocationsDropdown("#locationFilter")
-        populateDepartmentsDropDown("#departmentFilter")
+        populateLocationsDropdown(".locationFilter")
+        populateDepartmentsDropDown(".departmentFilter")
         
         populateLocations();
        break;
@@ -176,7 +179,7 @@ const populateLocations = () => {
         }
     });
     // OPEN ADD LOCATION MODAL AND POPULATE
-    $("#addLocations").on("click", function(){
+    $(".addLocations").on("click", function(){
         $("#manageLocationsModal").modal("show");
         $("#locationText").text("Add Location:");
         $("#locationName").val("");
@@ -283,7 +286,7 @@ const populateDepartments = () => {
         }
     });
     // OPEN ADD LOCATION MODAL AND POPULATE
-    $("#addDepartments").on("click", function(){
+    $(".addDepartments").on("click", function(){
         $("#manageDepartmentsModal").modal("show");
         populateLocationsDropdown("#locationsDropdown", "selection");
         $("#departmentName").val("");
@@ -388,16 +391,16 @@ const populateEmployees = () => {
                     $(`#edit${element.id}`).on("click", ()=> {
                         employeeEdit(id);
                     })
-                    // EDIT EMPLOYEES ONCLICK FUNCTION FOR MOBILE
-                    $(`#editMobile${element.id}`).on("click", ()=> {
-                        employeeEdit(id);
-                    })
 
                     //OPEN MODAL AND DELETE EMPLOYEE
                     $(`#delete${id}`).on("click", ()=> {
                         employeeDelete(id);
                     })
-                    //OPEN MODAL AND DELETE EMPLOYEE FOR MOBILE
+
+                    // EDIT EMPLOYEES ONCLICK FUNCTION FOR MOBILE
+                    $(`#editMobile${element.id}`).on("click", ()=> {
+                        employeeEdit(id);
+                    })
                     $(`#deleteMobile${id}`).on("click", ()=> {
                         employeeDelete(id);
                     })
@@ -411,7 +414,7 @@ const populateEmployees = () => {
         }
     });
     // OPEN ADD EMPLOYEE MODAL AND POPULATE
-    $("#addEmployee").on("click", function(){
+    $(".addEmployee").on("click", function(){
         let id;
         $("#manageEmployeesModal").modal("show");
         $("#exampleModalLabel").text("Add Employee")
@@ -693,8 +696,9 @@ const checkDepencency = (value, target) => {
 }
 
 const changeButton = (idName, buttonText) => {
-    $("#changeButton").html(`
-        <button type="button" class="btn btn-dark addEmployee" id="${idName}">${buttonText}</button>
+    $(".changeButton").html(`
+        <button type="button" class=" btn btn-dark ${idName} d-none d-lg-block">${buttonText}</button>
+        <button type="button" class="btn-dark d-flex justify-content-center col-12 btn ${idName} d-lg-none">${buttonText}</button>
     `);  
 }
 
@@ -1003,8 +1007,12 @@ const creationError = (array) => {
     }
 }
 
-//   SEARCH FUNCTON
-$(".searchButton").on("click", function(event){
+// SEARCH FUNCTON
+// DESKTOP
+$("#searchButton").on("click", function(event){
+    let searchText = $("#searchBar").val()
+    let locationFilter = $("#locationFilter").val()
+    let departmentFilter = $("#departmentFilter").val()
     event.preventDefault()
     // Render table for emloyees
     if(state != "all") {
@@ -1017,13 +1025,13 @@ $(".searchButton").on("click", function(event){
         type: 'POST',
         dataType: 'json',
         data: {
-            search: $("#searchBar").val(),
-            location: $("#locationFilter").val(),
-            department: $("#departmentFilter").val()
+            search: searchText,
+            location: locationFilter,
+            department: departmentFilter
         },  
         success: function(result) {
-            console.log(result)
             $("#tableBody").empty()
+            $("#myMobileTable > tbody").empty()
             result.data.forEach(element => {
                 let id = element.id;
                 $("#tableBody")
@@ -1041,12 +1049,144 @@ $(".searchButton").on("click", function(event){
                         </td>
                     </tr>`
                 );
+                $("#myMobileTable > tbody").append(`
+                <tr  id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne${element.id}" aria-expanded="true" aria-controls="collapseOne" class="">
+                    <td>${element.firstName} ${element.lastName}</td>
+                        <td>${element.department}</td>
+                        <td></td>
+                        <td></td>
+                </tr>
+                <tr>
+                    <td colspan="12">
+                        <div id="collapseOne${element.id}" class="accordion-collapse collapse sow" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body p-0">
+                                <div class="col">
+                                    <div class="row py-2">
+                                        <div class="col-6 text-break text-wrap">Email:</div>
+                                        <div class="col-6 text-break text-wrap">${element.email}</div>
+                                    </div>
+                                    <div class="row py-2">
+                                        <div class="col-6 text-break text-wrap">Location:</div>
+                                        <div class="col-6 text-break text-wrap">${element.location}</div>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class=" col-12 btn btn-warning edit mw-100" id="editMobile${element.id}" alt="Max-width 100%">Edit</button></div>
+                                        <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class="col-12 btn btn-danger delete mw-100" id="deleteMobile${element.id}" alt="Max-width 100%">Delete</button></div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </td>
+                </tr>
+            `);
+                //OPEN MODAL AND EDIT EMPLOYEE
                 $(`#edit${element.id}`).on("click", ()=> {
                     employeeEdit(id);
                 })
-
                 //OPEN MODAL AND DELETE EMPLOYEE
                 $(`#delete${id}`).on("click", ()=> {
+                    employeeDelete(id);
+                })
+                // EDIT EMPLOYEES ONCLICK FUNCTION FOR MOBILE
+                $(`#editMobile${element.id}`).on("click", ()=> {
+                    employeeEdit(id);
+                })
+                $(`#deleteMobile${id}`).on("click", ()=> {
+                    employeeDelete(id);
+                })
+            });
+        
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
+})
+// MOBILE
+$("#searchButtonMobile").on("click", function(event){
+    let searchText = $("#searchBarMobile").val();
+    let locationFilter = $("#locationFilterMobile").val();
+    let departmentFilter = $("#departmentFilterMobile").val();
+
+    event.preventDefault()
+    // Render table for emloyees
+    if(state != "all") {
+        state = "all";
+        checkState();
+    }
+    
+    $.ajax({
+        url: "libs/php/searchPersonnel.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            search: searchText,
+            location: locationFilter,
+            department: departmentFilter
+        },  
+        success: function(result) {
+            $("#myMobileTable > tbody").empty()
+            result.data.forEach(element => {
+                let id = element.id;
+                $("#tableBody")
+                .append(
+                    `<tr id="tableHeaderNames">
+                        <td>${element.firstName} ${element.lastName}</td>
+                        <td class="smallDisplays">${element.email}</td>
+                        <td class="smallDisplays">${element.location}</td>
+                        <td>${element.department}</td>
+                        <td>
+                            <button type="button" class="btn btn-warning edit" id="edit${element.id}">Edit</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger delete" id="delete${element.id}">Delete</button>
+                        </td>
+                    </tr>`
+                );
+                $("#myMobileTable > tbody").append(`
+                <tr  id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne${element.id}" aria-expanded="true" aria-controls="collapseOne" class="">
+                    <td>${element.firstName} ${element.lastName}</td>
+                        <td>${element.department}</td>
+                        <td></td>
+                        <td></td>
+                </tr>
+                <tr>
+                    <td colspan="12">
+                        <div id="collapseOne${element.id}" class="accordion-collapse collapse sow" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body p-0">
+                                <div class="col">
+                                    <div class="row py-2">
+                                        <div class="col-6 text-break text-wrap">Email:</div>
+                                        <div class="col-6 text-break text-wrap">${element.email}</div>
+                                    </div>
+                                    <div class="row py-2">
+                                        <div class="col-6 text-break text-wrap">Location:</div>
+                                        <div class="col-6 text-break text-wrap">${element.location}</div>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class=" col-12 btn btn-warning edit mw-100" id="editMobile${element.id}" alt="Max-width 100%">Edit</button></div>
+                                        <div class="col-6 mw-100" alt="Max-width 100%"><button type="button" class="col-12 btn btn-danger delete mw-100" id="deleteMobile${element.id}" alt="Max-width 100%">Delete</button></div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </td>
+                </tr>
+            `);
+                //OPEN MODAL AND EDIT EMPLOYEE
+                $(`#edit${element.id}`).on("click", ()=> {
+                    employeeEdit(id);
+                })
+                //OPEN MODAL AND DELETE EMPLOYEE
+                $(`#delete${id}`).on("click", ()=> {
+                    employeeDelete(id);
+                })
+                // EDIT EMPLOYEES ONCLICK FUNCTION FOR MOBILE
+                $(`#editMobile${element.id}`).on("click", ()=> {
+                    employeeEdit(id);
+                })
+                $(`#deleteMobile${id}`).on("click", ()=> {
                     employeeDelete(id);
                 })
             });

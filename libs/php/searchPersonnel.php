@@ -30,10 +30,10 @@
 	$search = preg_replace('/\s+/', '%', $_POST['search']);
 	$query = $conn->prepare(
 		'SELECT p.lastName, p.firstName, p.jobTitle, p.email, p.id, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) 
-		WHERE lastName LIKE "%'.$search.'%" 
+		WHERE concat(firstname, "", lastName)  LIKE "%'.$search.'%"  
 		AND l.name LIKE "%'.$_POST["location"].'%" 
 		AND d.name LIKE "%'.$_POST["department"].'%" 
-		ORDER BY `location` ASC
+		ORDER BY `lastName` ASC
 		');
 
 	$query->execute();
