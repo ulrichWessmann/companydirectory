@@ -6,13 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title>Company Directory</title>
 
-    <link rel="stylesheet" href="vendors/Bootstrap/bootstrap-4.1.3-dist/css/bootstrap.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <link rel="stylesheet" href="vendors/Bootstrap/bootstrap-5.0.2/css/bootstrap.css">
     <link rel="stylesheet" href="libs/css/styles.css">
 </head>
 <body>
+  <!-- preloader -->
+  <!-- <div class="preloader-wrapper">
+    <div class="preloader">
+        <img id="preloader-img" src="libs/images/1489.gif" alt="NILA">
+    </div>
+  </div> -->
 
   <div class="d-flex flex-column vh-100 vw-100 layer spacer">
-
 
     <!-- WEBPAGE HEADING AND BUTTONS -->
     <div class="container-fluid d-none d-lg-block">
@@ -23,9 +33,9 @@
         </div>
         <div class="col-lg-6 p-lg-2 pb-2" >
           <div class="row align-items-center">
-            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class="text-decoration-underline fw-bold fs-5 getEmployees">Employees</span></div>
-            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class="text-decoration-underline fw-bold fs-5 getDepartments"> Departments</span></div>
-            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class="text-decoration-underline fw-bold fs-5 getLocations">Locations</button></div>
+            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class="fw-bold fs-5 getEmployees navHeader">Employees</span></div>
+            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class=" fw-bold fs-5 getDepartments navHeader"> Departments</span></div>
+            <div class="col-lg-4 col-sm-12 text-center "><span role="button" id="" class=" fw-bold fs-5 getLocations navHeader">Locations</button></div>
           </div>
         </div>
       </div>
@@ -35,28 +45,28 @@
     <nav class="navbar navbar-light bg-transparent d-lg-none p-2">
       <div class="container-fluid">
           <h1 class="navbar-brand fs-3"><b>Company Directory</b></h1>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#burgerMenu" aria-controls="burgerMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
       </div>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse" id="burgerMenu">
         <div class="container">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <p role="button" class="getEmployees" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Employees</p>
+            <p role="button" class="getEmployees" data-bs-toggle="collapse" data-bs-target="#burgerMenu">Employees</p>
           </li>
           <li class="nav-item active">
-            <p role="button" class="getDepartments" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Departments</p>
+            <p role="button" class="getDepartments" data-bs-toggle="collapse" data-bs-target="#burgerMenu">Departments</p>
           </li>
           <li class="nav-item active">
-            <p role="button" class="getLocations" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Locations</p>
+            <p role="button" class="getLocations" data-bs-toggle="collapse" data-bs-target="#burgerMenu">Locations</p>
           </li>
           <form class="my-2">
             <input class="form-control  searchBar" id="searchBarMobile" type="search" placeholder="Search Employees" aria-label="Search" >
             <select name="filter" id="departmentFilterMobile" placeholder="" class="form-select my-2 departmentFilter"></select>
             <select name="locations" id="locationFilterMobile" placeholder="" class="form-select my-2 locationFilter"></select>
-            <button class="btn btn-outline-success searchButton my-2" type="submit" id="searchButtonMobile" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Search</button>
-            <button class="btn btn-outline-secondary resetButton my-2" type="submit" id="resetButton" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Reset</button>
+            <button class="btn btn-outline-success searchButton my-2" type="submit" id="searchButtonMobile" data-bs-toggle="collapse" data-bs-target="#burgerMenu">Search</button>
+            <button class="btn btn-outline-secondary resetButton my-2" type="submit" id="resetButton" data-bs-toggle="collapse" data-bs-target="#burgerMenu">Reset</button>
           </form>          
         </div>  
       </div>
@@ -65,15 +75,15 @@
     <!-- search -->
     <div class="container-fluid d-none d-lg-block">
       <div class="row">
-        <form class="col-sm-12 col-lg-6 ">
-          <input type="text" name="employee" id="searchBar" placeholder="Search Employees"  class="col-lg-3 col-12 my-1 searchBar ">
-          <select name="filter" id="departmentFilter" placeholder="" class="form-select-sm my-1 col-lg-3 col-12 departmentFilter"></select>
-          <select name="locations" id="locationFilter" placeholder="" class="form-select-sm my-1 col-lg-2 col-12 locationFilter"></select>
-          <button class="btn btn-dark col-lg-1 col-md-2 col-5 hideMe searchButton" type="submit" id="searchButton">Search</button>
-          <button class="btn btn-dark col-lg-1 col-md-2 col-5 hideMe resetButton" type="submit" id="resetButton">Reset</button>
+        <form class="col-sm-12 col-lg-8 px-lg-3">
+          <input type="text" name="employee" id="searchBar" placeholder="Search Employees"  class="my-1 searchBar col-lg-3 col-xl-2">
+          <select name="filter" id="departmentFilter" placeholder="" class="form-select-sm col-lg-3 col-xl-2 fs-6 my-1 departmentFilter"></select>
+          <select name="locations" id="locationFilter" placeholder="" class="form-select-sm fs-6  my-1 locationFilter"></select>
+          <button class="btn btn-dark searchButton" type="submit" id="searchButton">Search</button>
+          <button class="btn btn-dark resetButton" type="submit" id="resetButton">Reset</button>
           
         </form>
-        <div class="col-lg-6 col-12 align-self-end p-lg-1 pb-2 py-1">
+        <div class="col-lg-4 col-12 align-self-end p-lg-1 pb-2 py-1">
             <div class="d-flex justify-content-end px-lg-4 m-lg-0 col-12 changeButton" id="changeButton"></div>
         </div> 
       </div>
@@ -81,7 +91,7 @@
         
     </div>
       
-    <!-- table -->
+    <!-- add button for mobile -->
     <div class="container d-lg-none">
       <div class="row">
         <div class="col-lg-6 col-12 align-self-end p-lg-1 pb-2 py-1">
@@ -89,23 +99,21 @@
         </div>
       </div>
     </div>
-    <div class="overflow-auto d-flex  mt-sm-2 mt-lg-3 px-lg-3 px-2 d-none d-lg-block">
-      <table class="table  table-sm table-light border table-striped mx-md-auto align-middle" id="myTable">
+
+    <!-- table -->
+    <div class="overflow-auto d-flex mt-sm-2 mt-lg-3 border mx-lg-3 mx-2">
+      <table class="table table-sm table-light table-striped mx-md-auto" id="myTable">
       </table>
     </div>
-    <!-- mobile table -->
-    <div class="overflow-auto d-flex  mt-sm-2 mt-lg-3 px-lg-3 px-2 d-lg-none">
-      <table class="table  table-sm table-light border table-striped mx-md-auto" id="myMobileTable">
-        <thead class="sticky-top border-bottom" id="headingSelection"></thead>
-      </table>
-    </div>
+
   </div>
     
-    <!-- DELETE EMPLOYEE -->
+    <!-- DELETE Employee -->
   <div class="modal" id="deleteEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" id="deleteBox">
-        <div class="modal-header border-bottom-0" >                   
+        <div class="modal-header" >
+          <h5 class="modal-title" id="deleteSelection"></h5>                  
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
@@ -114,18 +122,17 @@
             <img id="cannotDeleteImg" src="libs/images/512px-Cross_red_circle.svg.png" alt="" class="img-thumbnail border-0" >
             
           </div>
-          <h5 class="modal-title text-center"></h5><br>
-          <p class="text-center"></p>
+          <br>
+          <p id="deleteName"></p>
         </div>
 
-        <div class="modal-footer justify-content-center border-top-0" id="deleteFooter">
+        <div class="modal-footer" id="deleteFooter">
           <button type="button" class="btn btn-danger" id="deleteConfirmation">Delete</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
-  </div>
- 
+  </div> 
 
   <!-- MANAGE EMPLOYEE -->
   <div class="modal" id="manageEmployeesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -138,29 +145,29 @@
         <div class="modal-body">
         <form id="formTest">
           <div class="mb-3">
-              <label for="firstName" class="form-label">First name:</label>
+              <label for="firstName" class="form-label">First name</label>
               <input type="text" class="form-control" id="firstName">
               <span id="nameError"></span>
           </div>
           <div class="mb-3">
-              <label for="lastName" class="form-label">Last name:</label>
+              <label for="lastName" class="form-label">Last name</label>
               <input type="text" class="form-control" id="lastName">
               <span id="lastNameError"></span>
           </div>
           <div class="mb-3">
-              <label for="lastName" class="form-label">Email:</label>
+              <label for="lastName" class="form-label">Email</label>
               <input type="email" class="form-control" id="email">
               <span id="emailError"></span>
           </div>
           <div class="mb-3">
-              <label for="department" class="form-label">Department:</label>
+              <label for="department" class="form-label">Department</label>
               <select class="form-select" id="addDepartments"></select>
           </div>
           <div class="mb-3">
-              <label for="location" class="form-label" >Location:</label>
+              <label for="location" class="form-label" >Location</label>
               <input type="text" class="form-control" id="addEmployeeLocation" readonly>
           </div>
-          <div class="modal-footer border-top-0" id="mangeEmployeesFooter"></div> 
+          <div class="modal-footer" id="mangeEmployeesFooter"></div> 
         </form>
         </div>
       </div>
@@ -172,15 +179,16 @@
   <div class="modal" id="manageLocationsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" id="manageLocationsDetails">
-        <div class="modal-header border-bottom-0" >             
+        <div class="modal-header" >
+          <h5 class="modal-title">Edit department</h5>            
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          <h5 id="locationText">Add Location:</h5>
+          <p id="locationText">Location</p>
           <input type="text" class="form-control" id="locationName">
           <span id="locationSpanError"></span>
       </div>
-      <div class="modal-footer border-top-0" id="locationsFooter"></div>
+      <div class="modal-footer" id="locationsFooter"></div>
       </div>
     </div>
   </div>
@@ -189,19 +197,20 @@
   <div class="modal" id="manageDepartmentsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" id="addDepartmentDetails">
-        <div class="modal-header border-bottom-0" >             
+        <div class="modal-header" >
+          <h5 class="modal-title">Edit department</h5>         
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body ">
-            <h5>Department:</h5>
+            <p>Department</p>
             <input type="text" class="form-control" id="departmentName" value="">
             <span id="departmentNameError"></span><br>
 
-            <h5>Department location:</h5>
+            <p>Department location</p>
             <select class="form-select" aria-label="Locations selection" id="locationsDropdown">
             </select>
         </div>
-        <div class="modal-footer justify-content-center border-top-0" id="departmentsFooter">
+        <div class="modal-footer" id="departmentsFooter">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-success" id="addDepartmentConfirmation">Confirm</button>
         </div>
@@ -210,7 +219,7 @@
   </div>
  
   <script src="libs/js/jquery-3.6.0.min.js"></script>
-  <script src="vendors/Bootstrap/bootstrap-4.1.3-dist/js/bootstrap.js"></script>
+  <script src="vendors/Bootstrap/bootstrap-5.0.2/js/bootstrap.js"></script>
   <script src="libs/js/script.js"></script>
 </body>
 </html>

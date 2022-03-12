@@ -70,7 +70,7 @@
 
 		// SQL does not accept parameters and so is not prepared
 
-		$query = 'SELECT name, id FROM location';
+		$query = 'SELECT name, id FROM location ORDER BY location.name ASC';
 
 		$result = $conn->query($query);
 		

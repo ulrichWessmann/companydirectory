@@ -28,7 +28,7 @@
 
 	if($_POST['action'] === "department") {
 
-		$query = $conn->prepare('SELECT * from personnel WHERE departmentID = ?');
+		$query = $conn->prepare('SELECT count(id) as depenencyCount from personnel WHERE departmentID = ?');
 
 		$query->bind_param("i", $_POST['search']);
 
@@ -63,7 +63,7 @@
 		$output['status']['name'] = "ok";
 		$output['status']['description'] = "success";
 		$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-		$output['data'] = count($personnel);
+		$output['data'] = $personnel;
 		
 		mysqli_close($conn);
 
@@ -72,7 +72,7 @@
 
 	} elseif ($_POST['action'] === "location") {
 		
-		$query = $conn->prepare('SELECT * from department WHERE locationID = ?');
+		$query = $conn->prepare('SELECT count(id) as depenencyCount from department WHERE locationID = ?');
 
 		$query->bind_param("i", $_POST['search']);
 
@@ -107,7 +107,7 @@
 		$output['status']['name'] = "ok";
 		$output['status']['description'] = "success";
 		$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-		$output['data'] = count($personnel);
+		$output['data'] = $personnel;
 		
 		mysqli_close($conn);
 

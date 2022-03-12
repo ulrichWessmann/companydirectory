@@ -26,19 +26,6 @@
   .addEmployee {
     width: 100%
   }
-  /* change table colors for mobile view */
-  .table-striped > tbody > tr:nth-of-type(4n + 1) > * {
-    --bs-table-accent-bg: rgba(0, 255, 128, 0.288);
-    color: var(--bs-table-striped-color);
-  }
-  .table-striped > tbody > tr:nth-of-type(4n + 3) > * {
-    --bs-table-accent-bg: rgba(157, 209, 224, 0.082);
-    color: var(--bs-table-striped-color);
-  }
-  .table-striped > tbody > tr:nth-of-type(even) > * {
-    --bs-table-accent-bg: white;
-    color: var(--bs-table-striped-color);
-  }
 }
 /* Hide extra information on mobile screens */
 @media only screen and (max-width: 1440px) {
@@ -54,14 +41,54 @@ body {
   overflow-x: hidden;
 }
 
-.btn-primary {
-  color: rgb(255, 255, 255);
-  background-color: #5fb491;
-  border-color: #5fb491;
+/* preloader config */
+body.preloader-site {
+  overflow: hidden;
 }
 
+.preloader-wrapper {
+  height: 100%;
+  width: 100%;
+  background: #FFF;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999999;
+}
 
-/* .table-striped > tbody > tr:nth-of-type(3n) > * {
-  --bs-table-accent-bg: var(--bs-table-striped-bg);
-  color: var(--bs-table-striped-color);
-} */
+.preloader-wrapper .preloader {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 120px;
+}
+#preloader-img{
+  margin: auto;
+}
+.table > :not(:first-child) {
+  border-top: 0;
+}
+
+/* right align edit/delete buttons */
+
+.rightAlign {
+  width: 100%;
+}
+.rightAlignEmployees {
+  width: 0;
+}
+
+table { 
+  border-collapse: separate;
+  border-spacing: 0; 
+} 
+
+.navHeader:hover {
+  border-radius: 25px;
+  color: #fff!important;
+  background-color: #000;
+  padding: 7px 14px 10px 14px;
+}
