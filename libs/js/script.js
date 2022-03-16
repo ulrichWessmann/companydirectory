@@ -115,53 +115,50 @@ $(window).on("load", () => {
   const createTable = () => {
     $("#employeesTable").html("");
     $("#employeesTable").append([
-      $('<thead>', {class: "sticky-top", id: "headingSelection"}).append([
-        $('<tr>', {id: "tableHeaderNames"}).append([
-          $('<th>', {scope: "col", text: "Name"}),
-          $('<th>', {scope: "col", text: "Email", class: "smallDisplays"}),
-          $('<th>', {scope: "col", text: "Location", class: "smallDisplays"}),
-          $('<th>', {scope: "col", text: "Department", class: "smallDisplays"}),
-          $('<th>'),
-          $('<th>')
-        ])
-      ]),
-      $('<tbody>', {id: "employeeTableBody"})
+        $('<thead>', {class: "sticky-top", id: "headingSelection"}).append([
+            $('<tr>', {id: "tableHeaderNames"}).append([
+            $('<th>', {scope: "col", text: "Name"}),
+            $('<th>', {scope: "col", text: "Email", class: "smallDisplays"}),
+            $('<th>', {scope: "col", text: "Location", class: "smallDisplays"}),
+            $('<th>', {scope: "col", text: "Department", class: "smallDisplays"}),
+            $('<th>'),
+            $('<th>')
+            ])
+        ]),
+        $('<tbody>', {id: "employeeTableBody"})
     ]);
-     
+    populateEmployees(); 
     $("#departmentsTable").html("");
     $("#departmentsTable").append([
-      $('<thead>', {class: "sticky-top", id: "headingSelection"}).append([
-        $('<tr>', {id: "tableHeaderNames"}).append([
-          $('<th>', {scope: "col", text: "Department"}),
-          $('<th>', {scope: "col"}),
-          $('<th>', {scope: "col"})
-        ])
-      ]),
-      $('<tbody>', {id: "departmentsTableBody"})
+        $('<thead>', {class: "sticky-top", id: "headingSelection"}).append([
+            $('<tr>', {id: "tableHeaderNames"}).append([
+            $('<th>', {scope: "col", text: "Department"}),
+            $('<th>', {scope: "col"}),
+            $('<th>', {scope: "col"})
+            ])
+        ]),
+        $('<tbody>', {id: "departmentsTableBody"})
     ]);
-  
+    populateDepartments();
     $("#locationsTable").html("");
     $("#locationsTable").append([
-      $('<thead>', {class: "sticky-top", id: "headingSelection"}).append([
-        $('<tr>', {id: "tableHeaderNames"}).append([
-          $('<th>', {scope: "col", text: "Locations"}),
-          $('<th>', {scope: "col"}),
-          $('<th>', {scope: "col"})
-        ])
-      ]),
-      $('<tbody>', {id: "locationsTableBody"})
+        $('<thead>', {class: "sticky-top", id: "headingSelection"}).append([
+            $('<tr>', {id: "tableHeaderNames"}).append([
+            $('<th>', {scope: "col", text: "Locations"}),
+            $('<th>', {scope: "col"}),
+            $('<th>', {scope: "col"})
+            ])
+        ]),
+        $('<tbody>', {id: "locationsTableBody"})
      ]);
   
     $("#searchBar").val("").change();
     $("#searchBarMobile").val("").change()
-  
+    
     populateLocationsDropdown(".locationFilter");
     populateDepartmentsDropDown(".departmentFilter");
-  
-    populateEmployees();
-    populateDepartments();
+
     populateLocations();
-  
   }
   
   const populateEmployees = () => {
