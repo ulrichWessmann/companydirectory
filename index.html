@@ -12,15 +12,16 @@
     <link rel="manifest" href="/site.webmanifest">
 
     <link rel="stylesheet" href="vendors/Bootstrap/bootstrap-5.0.2/css/bootstrap.css">
+    <link rel="stylesheet" href="vendors/fontawesome-free-6.0.0-beta3-web/css/all.min.css">
     <link rel="stylesheet" href="libs/css/styles.css">
 </head>
 <body>
   <!-- preloader -->
-  <div class="preloader-wrapper">
+  <!-- <div class="preloader-wrapper">
     <div class="preloader">
         <img id="preloader-img" src="libs/images/1489.gif" alt="NILA">
     </div>
-  </div>
+  </div> -->
 
   <div class="d-flex flex-column vh-100 vw-100 layer spacer">
 
@@ -62,7 +63,7 @@
             <p role="button" class="getLocations" data-bs-toggle="collapse" data-bs-target="#burgerMenu">Locations</p>
           </li>
           <form class="my-2">
-            <input class="form-control  searchBar" id="searchBarMobile" type="search" placeholder="Search Employees" aria-label="Search" >
+            <input class="form-control  searchBar" id="searchBarMobile" type="search" placeholder="Search Employees" aria-label="Search" autocomplete="off">
             <select name="filter" id="departmentFilterMobile" placeholder="" class="form-select my-2 departmentFilter"></select>
             <select name="locations" id="locationFilterMobile" placeholder="" class="form-select my-2 locationFilter"></select>
             <button class="btn btn-outline-success searchButton my-2" type="submit" id="searchButtonMobile" data-bs-toggle="collapse" data-bs-target="#burgerMenu">Search</button>
@@ -76,7 +77,7 @@
     <div class="container-fluid d-none d-lg-block">
       <div class="row">
         <form class="col-sm-12 col-lg-8 px-lg-3">
-          <input type="text" name="employee" id="searchBar" placeholder="Search Employees"  class="my-1 searchBar col-lg-3 col-xl-2">
+          <input type="text" name="employee" id="searchBar" placeholder="Search Employees"  class="my-1 searchBar col-lg-3 col-xl-2" autocomplete="off">
           <select name="filter" id="departmentFilter" placeholder="" class="form-select-sm col-lg-3 col-xl-2 fs-6 my-1 departmentFilter"></select>
           <select name="locations" id="locationFilter" placeholder="" class="form-select-sm fs-6  my-1 locationFilter"></select>
           <button class="btn btn-dark searchButton" type="submit" id="searchButton">Search</button>
@@ -87,8 +88,6 @@
             <div class="d-flex justify-content-end px-lg-4 m-lg-0 col-12 changeButton" id="changeButton"></div>
         </div> 
       </div>
-        
-        
     </div>
       
     <!-- add button for mobile -->
@@ -100,41 +99,27 @@
       </div>
     </div>
 
-    <!-- table -->
-    <div class="overflow-auto d-flex mt-sm-2 mt-lg-3 border mx-lg-3 mx-2">
-      <table class="table table-sm table-light table-striped mx-md-auto" id="myTable">
+    <!-- table employees-->
+    <div class="overflow-auto d-flex mt-sm-2 mt-lg-3 border mx-lg-3 mx-2" id="employeeContainer">
+      <table class="table table-sm table-light table-striped mx-md-auto" id="employeesTable">
+      </table>
+    </div>
+    <!-- table departments-->
+    <div class="overflow-auto d-flex mt-sm-2 mt-lg-3 border mx-lg-3 mx-2 " id="departmentContainer">
+      <table class="table table-sm table-light table-striped mx-md-auto" id="departmentsTable">
+      </table>
+    </div>
+    <!-- table locations-->
+    <div class="overflow-auto d-flex mt-sm-2 mt-lg-3 border mx-lg-3 mx-2 d-none" id="locationContainer">
+      <table class="table table-sm table-light table-striped mx-md-auto" id="locationsTable">
       </table>
     </div>
 
   </div>
     
-    <!-- DELETE Employee -->
-  <div class="modal" id="deleteEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content" id="deleteBox">
-        <div class="modal-header" >
-          <h5 class="modal-title" id="deleteSelection"></h5>                  
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body" id="deleteBody">
-          <div class="text-center">
-            <img id="cannotDeleteImg" src="libs/images/512px-Cross_red_circle.svg.png" alt="" class="img-thumbnail border-0" >
-            
-          </div>
-          <br>
-          <p id="deleteName"></p>
-        </div>
-
-        <div class="modal-footer" id="deleteFooter">
-          <button type="button" class="btn btn-danger" id="deleteConfirmation">Delete</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div> 
-
-  <!-- MANAGE EMPLOYEE -->
+  <!-- MODALS -->
+  <div>
+    <!-- MANAGE EMPLOYEE -->
   <div class="modal" id="manageEmployeesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" id="newEmployeeDetails">
@@ -143,57 +128,147 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-        <form id="formTest">
+        <form id="addEmployeeFrom">
           <div class="mb-3">
               <label for="firstName" class="form-label">First name</label>
-              <input type="text" class="form-control" id="firstName">
+              <input type="text" class="form-control" id="firstName" autocomplete="off">
               <span id="nameError"></span>
           </div>
           <div class="mb-3">
               <label for="lastName" class="form-label">Last name</label>
-              <input type="text" class="form-control" id="lastName">
+              <input type="text" class="form-control" id="lastName" autocomplete="off">
               <span id="lastNameError"></span>
           </div>
           <div class="mb-3">
               <label for="lastName" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email">
+              <input type="email" class="form-control" id="email" autocomplete="off">
               <span id="emailError"></span>
           </div>
           <div class="mb-3">
               <label for="department" class="form-label">Department</label>
-              <select class="form-select" id="addDepartments"></select>
+              <select class="form-select" id="employeeDepartments"></select>
           </div>
           <div class="mb-3">
               <label for="location" class="form-label" >Location</label>
               <input type="text" class="form-control" id="addEmployeeLocation" readonly>
           </div>
-          <div class="modal-footer" id="mangeEmployeesFooter"></div> 
+          <div class="modal-footer" id="manageEmployeesFooter"></div> 
         </form>
         </div>
       </div>
     </div>
   </div>
-
-
-    <!-- MANAGE LOCATIONS -->
-  <div class="modal" id="manageLocationsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- DELETE Employee -->
+  <div class="modal" id="deleteEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content" id="manageLocationsDetails">
+      <div class="modal-content" id="deleteBox">
         <div class="modal-header" >
-          <h5 class="modal-title">Edit department</h5>            
+          <h5 class="modal-title">Delete emloyee</h5>                  
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body" id="deleteBody">
+          <p id="deleteName"></p>
+        </div>
+
+        <div class="modal-footer" id="deleteFooter">
+          <button type="button" class="btn btn-danger" id="deleteEmployee">Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+  <!-- ADD LOCATIONS -->
+  <div class="modal" id="addLocationsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" id="addLocationsDetails">
+        <div class="modal-header" >
+          <h5 class="modal-title">Add location</h5>            
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
           <p id="locationText">Location</p>
           <input type="text" class="form-control" id="locationName">
-          <span id="locationSpanError"></span>
+          <span id="addLocationSpanError"></span>
       </div>
-      <div class="modal-footer" id="locationsFooter"></div>
+      <div class="modal-footer" id="locationsFooter">
+        <button type="button" class="btn btn-success" id="confirmAddingLocation">Confirm</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
       </div>
     </div>
   </div>
+<!-- MANAGE LOCATIONS -->
+  <div class="modal" id="manageLocationsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" id="manageLocationsDetails">
+        <div class="modal-header" >
+          <h5 class="modal-title">Edit location</h5>            
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p id="locationText">Location</p>
+          <input type="text" class="form-control" id="EditLocationName">
+          <span id="locationSpanError"></span>
+      </div>
+      <div class="modal-footer" id="locationsFooter">
+        <button type="button" class="btn btn-success" id="confirmUpdatingLocation">Confirm</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+      </div>
+    </div>
+  </div>
+  <!-- DELETE LOCATION -->
+  <div class="modal" id="deleteLocationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" id="deleteBox">
+        <div class="modal-header" >
+          <h5 class="modal-title" id="deleteSelection">Delete location</h5>                  
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-  <!-- EDIT DEPARTMENTS -->
+        <div class="modal-body" id="deleteBody">
+          <div class="text-center">
+            <img id="cannotDeleteImg" src="libs/images/512px-Cross_red_circle.svg.png" alt="" class="cannotDeleteImg img-thumbnail border-0" >
+          </div>
+          <br>
+          <p class="unableToDelete text-center">Unable to delete location as it contains department entries.</p>
+          <p class="deleteName"></p>
+        </div>
+
+        <div class="modal-footer" id="deleteFooter">
+          <button type="button" class="btn btn-danger deleteConfirmation" id="locationDelete">Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <!-- ADD DEPARTMENTS -->
+  <div class="modal" id="addDepartmentsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" id="addDepartmentDetails">
+        <div class="modal-header" >
+          <h5 class="modal-title">Add department</h5>         
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body ">
+            <p>Department</p>
+            <input type="text" class="form-control" id="addDepartmentName" value="" autocomplete="off">
+            <span id="addDepartmentNameError"></span><br>
+
+            <p>Department location</p>
+            <select class="form-select" aria-label="Locations selection" id="AddLocationsDropdown">
+            </select>
+        </div>
+        <div class="modal-footer" id="departmentsFooter">
+            <button type="button" class="btn btn-success" id="addDepartmentConfirmation">Confirm</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- MANAGE DEPARTMENTS -->
   <div class="modal" id="manageDepartmentsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content" id="addDepartmentDetails">
@@ -203,7 +278,7 @@
         </div>
         <div class="modal-body ">
             <p>Department</p>
-            <input type="text" class="form-control" id="departmentName" value="">
+            <input type="text" class="form-control" id="departmentName" value="" autocomplete="off">
             <span id="departmentNameError"></span><br>
 
             <p>Department location</p>
@@ -211,13 +286,41 @@
             </select>
         </div>
         <div class="modal-footer" id="departmentsFooter">
+            <button type="button" class="btn btn-success" id="editDepartmentConfirmation">Confirm</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success" id="addDepartmentConfirmation">Confirm</button>
+            
         </div>
       </div>
     </div>
   </div>
- 
+    <!-- DELETE DEPARTMENT -->
+    <div class="modal" id="deleteDepartmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" id="deleteBox">
+          <div class="modal-header" >
+            <h5 class="modal-title" id="deleteSelection">Delete department</h5>                  
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+  
+          <div class="modal-body" id="deleteBody">
+            <div class="text-center">
+              <img id="cannotDeleteImg" src="libs/images/512px-Cross_red_circle.svg.png" alt="" class="cannotDeleteImg img-thumbnail border-0" >
+            </div>
+            <br>
+            <p class="unableToDelete text-center">Unable to delete department as it contains employee entries.</p>
+            <p class="deleteName"></p>
+          </div>
+  
+          <div class="modal-footer" id="deleteFooter">
+            <button type="button" class="btn btn-danger deleteConfirmation" id="departmentDelete">Delete</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
   <script src="libs/js/jquery-3.6.0.min.js"></script>
   <script src="vendors/Bootstrap/bootstrap-5.0.2/js/bootstrap.js"></script>
   <script src="libs/js/script.js"></script>
